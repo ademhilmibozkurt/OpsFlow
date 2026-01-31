@@ -2,11 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OpsFlow.Domain.Entities
 {
-    public class User : BaseEntity
+    public class IncidentTask : BaseEntity
     {
         [Required]
-        public int Id {get; set;}
+        public string Name {get; set;}
         [Required]
-        public string UserName {get; set;} 
+        public Incident Incident {get; set;}
     }
 }

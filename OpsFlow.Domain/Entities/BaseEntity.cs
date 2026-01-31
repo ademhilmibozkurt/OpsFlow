@@ -1,10 +1,13 @@
-namespace OpsFlow.Api.Entities
+using System.ComponentModel.DataAnnotations;
+
+namespace OpsFlow.Domain.Entities
 {
     public class BaseEntity
     {
-        public int Id;
-        public DateTime CreatedAt;
-        public DateTime UpdatedAt;
-        public bool IsDeleted;
+        [Required][Key]
+        public int Id {get; set;}
+        public DateTime CreatedAt {get; set;}
+        public DateTime UpdatedAt {get; set;}
+        public bool IsDeleted {get; set;}
     }
 }
