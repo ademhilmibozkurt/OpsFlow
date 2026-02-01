@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Domain.Entities
 {
@@ -8,5 +9,6 @@ namespace OpsFlow.Domain.Entities
         public string Name {get; set;}
         [Required]
         public Incident Incident {get; set;}
+        public States State {get; set;}
     }
 }
