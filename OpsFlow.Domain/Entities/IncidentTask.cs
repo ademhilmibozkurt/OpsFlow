@@ -9,6 +9,6 @@ namespace OpsFlow.Domain.Entities
         public string Name {get; set;}
         [Required]
         public Incident Incident {get; set;}
-        public States State {get; set;}
+        public IncidentTaskState TaskState {get; set;}
     }
 }

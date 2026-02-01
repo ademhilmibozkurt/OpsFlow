@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Domain.Entities
 {
     public class Incident : BaseEntity
     {
         [Required]
-        public string Name {get; set;}
+        public string Title {get; set;}
         public string Description {get; set;}
+        public IncidentPriority Priority {get; set;}
+        public IncidentState State {get; set;}
     }
 }
