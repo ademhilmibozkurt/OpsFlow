@@ -4,6 +4,7 @@ namespace OpsFlow.Domain.Enums
     {
         Open = 1,
         Closed = 2,
-        Aborted = 3
+        Investigating = 3,
+        Aborted = 4
     }
 }

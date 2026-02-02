@@ -8,7 +8,8 @@ namespace OpsFlow.Domain.Entities
         [Required]
         public string Title {get; set;}
         public string Description {get; set;}
+        [Required]
         public IncidentPriority Priority {get; set;}
-        public IncidentState State {get; set;}
+        public IncidentState State;
     }
 }
