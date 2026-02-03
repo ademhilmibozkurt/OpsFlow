@@ -1,15 +1,22 @@
-using System.ComponentModel.DataAnnotations;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Domain.Entities
 {
     public class Incident : BaseEntity
     {
-        [Required]
-        public string Title {get; set;}
-        public string Description {get; set;}
-        [Required]
-        public IncidentPriority Priority {get; set;}
-        public IncidentState State;
+        private string _title;
+        private string _description;
+        private IncidentPriority _priority;
+        private IncidentState _state;
+
+        public string Title => _title;
+        public string Description => _description;
+        public IncidentPriority Priority => _priority;
+        public IncidentState State => _state;
+
+        public Incident()
+        {
+            
+        }
     }
 }

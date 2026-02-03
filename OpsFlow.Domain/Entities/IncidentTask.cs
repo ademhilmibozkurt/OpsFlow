@@ -11,7 +11,7 @@ namespace OpsFlow.Domain.Entities
         private string _note = "";
         private IncidentTaskState _taskState;
 
-        // properties can read only outside the class
+        // properties can read-only outside the class
         public string Title => _title;
         public string Note => _note;
         public IncidentTaskState TaskState => _taskState;
