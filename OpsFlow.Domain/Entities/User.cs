@@ -42,14 +42,30 @@ namespace OpsFlow.Domain.Entities
             ChangeState(false, "User already deactivated. Can not deactivate!");
         }
 
-        private void ChangeState(bool to, string errorMessage)
+        private void ChangeState(bool toState, string errorMessage)
         {
-            if (_isActive == to)
+            if (_isActive == toState)
             {
                 throw new InvalidOperationException(errorMessage);
             }
 
-            _isActive = to;
+            _isActive = toState;
         } 
+
+        // user role can change by admin. where can i do this operation? add logic later
+        public void MakeUserAdmin()
+        {
+            
+        }
+
+        public void MakeUserIncidentManager()
+        {
+            
+        }
+
+        private void ChangeRole(Roles toRole, string errorMessage)
+        {
+            
+        }
     }
 }
