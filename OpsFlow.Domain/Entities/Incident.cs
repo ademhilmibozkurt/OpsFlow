@@ -18,11 +18,9 @@ namespace OpsFlow.Domain.Entities
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
 
-        // Authentication -> Application Layer
-        // Admin, Incident manager and user that created the incident allow to close incident -> Application Layer
+        
         public Incident(string title, string description, int createdById, List<IncidentTask> tasks)
         {
-            // tasklar hallolduysa incident kapanır!!!
             EnsureIsValid(title, "title");
             EnsureIsValid(description, "description");
 
@@ -40,9 +38,8 @@ namespace OpsFlow.Domain.Entities
                 throw new ArgumentException($"-{name}- can not be empty!");
         }
 
-        public void Close()
+        public void Close(bool isTasksDone)
         {
-            EnsureTasksDone();
             if (_state == IncidentState.Aborted || _state == IncidentState.Closed)
             {
                 throw new InvalidOperationException($"{_state} incident can not close!");
@@ -51,18 +48,11 @@ namespace OpsFlow.Domain.Entities
             {
                 throw new InvalidOperationException("Incident not investigated yet. Can not close!");
             }
-            _state = IncidentState.Closed;
-        }
-
-        private void EnsureTasksDone()
-        {
-            foreach(IncidentTask t in _tasks)
+            if(!isTasksDone)
             {
-                if(t.TaskState == IncidentTaskState.InProgress || t.TaskState == IncidentTaskState.Appointed)
-                {
-                    throw new InvalidOperationException("All tasks have to finish for closing the incident!");
-                }   
+                throw new InvalidOperationException("Incident can not close because all tasks are not done yet!");
             }
+            _state = IncidentState.Closed;
         }
 
         public void Investigate()

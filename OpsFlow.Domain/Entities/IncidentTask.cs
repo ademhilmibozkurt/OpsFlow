@@ -6,12 +6,14 @@ namespace OpsFlow.Domain.Entities
     {
         // incident has not change after entity created
         private readonly Incident _incident;
+        private int _incidentId;
 
         private string _title = "";
         private string _note = "";
         private IncidentTaskState _taskState;
 
         // properties can read-only outside the class
+        public int IncidentId => _incidentId;
         public string Title => _title;
         public string Note => _note;
         public IncidentTaskState TaskState => _taskState;
@@ -24,10 +26,11 @@ namespace OpsFlow.Domain.Entities
 
             EnsureIncidentIsOpen();
             EnsureTitleIsValid(title);
-
+            
             _title = title;
             _note  = note;
-            _taskState = IncidentTaskState.Appointed;
+            _incidentId = _incident.Id;
+            _taskState = IncidentTaskState.Assigned;
         }
 
         private void EnsureIncidentIsOpen()
@@ -47,7 +50,7 @@ namespace OpsFlow.Domain.Entities
         public void Start()
         {
             ChangeState(
-                IncidentTaskState.Appointed,
+                IncidentTaskState.Assigned,
                 IncidentTaskState.InProgress,
                 $"Task state is {_taskState}. Task can not start!");
         }
@@ -62,7 +65,7 @@ namespace OpsFlow.Domain.Entities
 
         public void Abort()
         {
-            if (_taskState != IncidentTaskState.Appointed && _taskState != IncidentTaskState.InProgress)
+            if (_taskState != IncidentTaskState.Assigned && _taskState != IncidentTaskState.InProgress)
             {
                 throw new InvalidOperationException($"Task state is {_taskState}. Abortion can not done!");
             }

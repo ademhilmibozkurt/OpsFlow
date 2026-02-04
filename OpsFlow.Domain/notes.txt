@@ -1,0 +1,8 @@
+// Authentication -> Application Layer
+
+// Create Task -> Application Layer
+
+// Admin, Incident manager and user that created the incident allow to close incident -> Application Layer
+
+// EnsureTasksDone method deleted because Application Layer will manage TaskRepository. When incident want to close,
+if all tasks done so incident can close. 
