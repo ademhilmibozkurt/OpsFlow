@@ -20,7 +20,6 @@ namespace OpsFlow.Domain.Entities
 
         public IncidentTask(Incident incident, string title, string note = "")
         {
-            // if incident rule the task then incident must delete from here
             // ensure incident exists. readonly property only set in ctor.
             _incident = incident ?? throw new ArgumentNullException(nameof(incident));
 
