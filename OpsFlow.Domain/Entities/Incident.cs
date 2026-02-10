@@ -11,7 +11,7 @@ namespace OpsFlow.Domain.Entities
         private int _abortedById;
         private IncidentPriority _priority;
         private IncidentState _state;
-        private List<IncidentTask> _tasks;
+        // private List<IncidentTask> _tasks;
 
         public string Title => _title;
         public string Description => _description;
