@@ -4,6 +4,6 @@ namespace OpsFlow.Application.Abstractions.Persistence
 {
     public interface IIncidentRepository
     {
-        public void AddAsync(Incident incident);
+        public Task AddAsync(Incident incident);
     }
 }

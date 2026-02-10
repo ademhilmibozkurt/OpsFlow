@@ -3,6 +3,7 @@ using OpsFlow.Application.Abstractions.Services;
 
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Domain.Entities;
+using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Commands.CreateIncident
 {
@@ -38,14 +39,14 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             }
 
             // createIncident
-            Incident incident = Incident(command.title, command.description, command.createdById);
+            Incident incident =  new Incident(command.title, command.description, command.createdById);
             await _incidentRepository.AddAsync(incident);
 
             // addHistory
-            IncidentHistory history = IncidentHistory.Create(incident.id, user.id, DateTime.UtcNow);
+            IncidentHistory history = new IncidentHistory(incident.Id, user.Id, IncidentState.Open, DateTime.UtcNow);
             await _incidentHistoryRepository.AddAsync(history);
 
-            return incident.id;
+            return incident.Id;
         }
         
     }
