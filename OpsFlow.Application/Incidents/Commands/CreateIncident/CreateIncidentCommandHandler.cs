@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Components.Web;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Commands.CreateIncident
@@ -34,7 +34,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             // checkPermission
             if (!_permissionService.CanCreateIncident(user))
             {
-                throw new ForbiddenException();
+                throw new ForbiddenException("User not authenticated for creating incident operation!");
             }
 
             // createIncident
@@ -44,7 +44,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             // addHistory
             IncidentHistory history = IncidentHistory.Create(incident.id, user.id, DateTime.UtcNow);
             await _incidentHistoryRepository.AddAsync(history);
-            
+
             return incident.id;
         }
         
