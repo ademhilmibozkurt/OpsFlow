@@ -19,7 +19,7 @@ namespace OpsFlow.Domain.Entities
         public IncidentState State => _state;
 
         
-        public Incident(string title, string description, int createdById, List<IncidentTask> tasks)
+        public Incident(string title, string description, int createdById) // , List<IncidentTask> tasks
         {
             EnsureIsValid(title, "title");
             EnsureIsValid(description, "description");
@@ -27,7 +27,7 @@ namespace OpsFlow.Domain.Entities
             _title = title;
             _description = description;
             _createdById = createdById;
-            _tasks = tasks;
+            // _tasks = tasks;
             _priority = IncidentPriority.Normal;
             _state = IncidentState.Open;
         }

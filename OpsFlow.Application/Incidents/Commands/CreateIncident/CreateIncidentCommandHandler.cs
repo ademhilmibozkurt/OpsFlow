@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Components.Web;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+
+using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Commands.CreateIncident
 {
@@ -23,15 +26,27 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             _permissionService = permissionService;
         }
 
+        public async Task<int> Handle(CreateIncidentCommand command)
+        {
+            // getCurrentUser
+            var user = _currentUser.Get();
 
-        // getCurrentUser
+            // checkPermission
+            if (!_permissionService.CanCreateIncident(user))
+            {
+                throw new ForbiddenException();
+            }
 
-        // checkPermission
+            // createIncident
+            Incident incident = Incident(command.title, command.description, command.createdById);
+            await _incidentRepository.AddAsync(incident);
 
-        // createIncident
-
-        // addHistory
-
-        // save
+            // addHistory
+            IncidentHistory history = IncidentHistory.Create(incident.id, user.id, DateTime.UtcNow);
+            await _incidentHistoryRepository.AddAsync(history);
+            
+            return incident.id;
+        }
+        
     }
 }

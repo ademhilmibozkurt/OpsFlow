@@ -1,3 +1,5 @@
+using OpsFlow.Domain.Enums;
+
 namespace OpsFlow.Domain.Entities
 {
     public class IncidentHistory : BaseEntity
@@ -8,19 +10,31 @@ namespace OpsFlow.Domain.Entities
         private int _performedById;
         private int? _relatedTaskId;
 
-        public IncidentHistory(int incidentId, Enum eventType, DateTime occuredAt, int performedById, int? relatedTaskId)
+        public IncidentHistory(int incidentId, int performedById, Enum eventType, DateTime occuredAt, int? relatedTaskId)
         {
             // every event is splitted.
             EnsureIdPositive(incidentId, "incidentId");
             EnsureIdPositive(performedById, "performedById");
 
             _incidentId = incidentId;
+            _performedById = performedById;
             _eventType  = eventType;
             _occuredAt  = occuredAt;
-            _performedById = performedById;
 
             EnsureRelatedTaskId(relatedTaskId);
             _relatedTaskId = relatedTaskId;
+        }
+
+        public void Create(int incidentId, int performedById, DateTime occuredAt)
+        {
+            // every event is splitted.
+            EnsureIdPositive(incidentId, "incidentId");
+            EnsureIdPositive(performedById, "performedById");
+
+            _incidentId = incidentId;
+            _performedById = performedById;
+            _eventType  = IncidentState.Open;
+            _occuredAt  = occuredAt;
         }
 
         private void EnsureIdPositive(int id, string name)
