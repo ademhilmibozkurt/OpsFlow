@@ -22,6 +22,7 @@ namespace OpsFlow.Domain.Entities
             _occuredAt  = occuredAt;
         }
 
+        // think about adding task history
         public IncidentHistory(int incidentId, int performedById, Enum eventType, DateTime occuredAt, int? relatedTaskId)
         {
             // every event is splitted.

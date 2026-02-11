@@ -39,7 +39,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             }
 
             // createIncident
-            Incident incident =  new Incident(command.title, command.description, command.createdById);
+            Incident incident =  new Incident(command.title, command.description, user.Id);
             await _incidentRepository.AddAsync(incident);
 
             // addHistory
