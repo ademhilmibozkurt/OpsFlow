@@ -19,5 +19,13 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             _context.Incidents.Add(incident);
             await _context.SaveChangesAsync();
         }
+
+        // GetById
+
+        // GetWithTasks
+
+        // ListByUser
+
+        // Remove
     }
 }

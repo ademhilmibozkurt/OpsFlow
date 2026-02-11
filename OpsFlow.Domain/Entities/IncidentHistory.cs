@@ -8,9 +8,9 @@ namespace OpsFlow.Domain.Entities
         private Enum _eventType;
         private DateTime _occuredAt;
         private int _performedById;
-        private int? _relatedTaskId;
+        private int? _taskId;
 
-        public IncidentHistory(int incidentId, int performedById, Enum eventType, DateTime occuredAt)
+        private IncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
         {
             // every event is splitted.
             EnsureIdPositive(incidentId, "incidentId");
@@ -22,8 +22,7 @@ namespace OpsFlow.Domain.Entities
             _occuredAt  = occuredAt;
         }
 
-        // think about adding task history
-        public IncidentHistory(int incidentId, int performedById, Enum eventType, DateTime occuredAt, int? relatedTaskId)
+        private IncidentHistory(int incidentId, int performedById, IncidentTaskState eventType, DateTime occuredAt, int taskId)
         {
             // every event is splitted.
             EnsureIdPositive(incidentId, "incidentId");
@@ -34,8 +33,20 @@ namespace OpsFlow.Domain.Entities
             _eventType  = eventType;
             _occuredAt  = occuredAt;
 
-            EnsureRelatedTaskId(relatedTaskId);
-            _relatedTaskId = relatedTaskId;
+            EnsureRelatedTaskId(taskId);
+            _taskId = taskId;
+        }
+
+        // add incident history with factory
+        public static IncidentHistory AddIncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
+        {
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt);
+        }
+
+        // add task history with factory
+        public static IncidentHistory AddTaskHistory(int incidentId, int performedById, IncidentTaskState eventType, DateTime occuredAt, int taskId)
+        {
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt, taskId);
         }
 
         private void EnsureIdPositive(int id, string name)
