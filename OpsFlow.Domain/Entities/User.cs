@@ -15,7 +15,7 @@ namespace OpsFlow.Domain.Entities
         public bool IsActive => _isActive;
         public Roles Role => _role;
 
-        public User(string fullName, string email)
+        private User(string fullName, string email)
         {
             EnsureIsValid(fullName);
             EnsureIsValid(email);
@@ -24,6 +24,11 @@ namespace OpsFlow.Domain.Entities
             _email    = email;
             _isActive = true;
             _role     = Roles.User;
+        }
+
+        public static User Create(string fullname, string email)
+        {
+            return new User(fullname, email);
         }
 
         private void EnsureIsValid(string text)

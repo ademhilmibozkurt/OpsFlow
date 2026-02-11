@@ -8,7 +8,7 @@ namespace OpsFlow.Domain.Entities
         private Enum _eventType;
         private DateTime _occuredAt;
         private int _performedById;
-        private int? _taskId;
+        private int _taskId;
 
         private IncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
         {
@@ -46,6 +46,7 @@ namespace OpsFlow.Domain.Entities
         // add task history with factory
         public static IncidentHistory AddTaskHistory(int incidentId, int performedById, IncidentTaskState eventType, DateTime occuredAt, int taskId)
         {
+
             return new IncidentHistory(incidentId, performedById, eventType, occuredAt, taskId);
         }
 

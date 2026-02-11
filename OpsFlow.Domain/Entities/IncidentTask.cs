@@ -18,7 +18,7 @@ namespace OpsFlow.Domain.Entities
         public string Note => _note;
         public IncidentTaskState TaskState => _taskState;
 
-        public IncidentTask(Incident incident, string title, string note = "")
+        private IncidentTask(Incident incident, string title, string note = "")
         {
             // ensure incident exists. readonly property only set in ctor.
             _incident = incident ?? throw new ArgumentNullException(nameof(incident));
@@ -30,6 +30,11 @@ namespace OpsFlow.Domain.Entities
             _note  = note;
             _incidentId = _incident.Id;
             _taskState = IncidentTaskState.Assigned;
+        }
+
+        public static IncidentTask Create(Incident incident, string title, string note = "")
+        {
+            return new IncidentTask(incident, title, note);
         }
 
         private void EnsureIncidentIsOpen()
