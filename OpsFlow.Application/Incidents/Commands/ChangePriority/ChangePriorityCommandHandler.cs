@@ -1,8 +1,6 @@
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
-using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Domain.Entities;
-using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Commands.ChangePriority
 {
