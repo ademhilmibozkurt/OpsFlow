@@ -12,18 +12,21 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
+        private readonly IUnitOfWork _unitOfWork;
         
         // dependency injection
         public ChangePriorityCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
-            IPermissionService permissionService)
+            IPermissionService permissionService,
+            IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
             _permissionService = permissionService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<int> Handle(ChangePriorityCommand command)
@@ -46,6 +49,7 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
             await _historyRepository.AddAsync(history);
 
             // save UoW's job
+            _unitOfWork.Commit();
 
             return incident.Id;
         }
