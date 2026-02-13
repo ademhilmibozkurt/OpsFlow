@@ -4,6 +4,7 @@ namespace OpsFlow.Application.Abstractions.Services
 {
     public interface IPermissionService
     {
-        public bool CanCreateIncident(User user);
+        void CanCreateIncident(User user);
+        void CanChangePriority(int createdById, User user);
     }
 }

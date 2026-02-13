@@ -36,10 +36,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             var user = _currentUser.Get();
 
             // checkPermission
-            if (!_permissionService.CanCreateIncident(user))
-            {
-                throw new ForbiddenException("User not authenticated for creating incident operation!");
-            }
+            _permissionService.CanCreateIncident(user);
 
             // createIncident
             Incident incident =  Incident.Create(command.title, command.description, user.Id);

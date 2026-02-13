@@ -17,6 +17,7 @@ namespace OpsFlow.Domain.Entities
 
         public string Title => _title;
         public string Description => _description;
+        public int CreatedById => _createdById;
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
 

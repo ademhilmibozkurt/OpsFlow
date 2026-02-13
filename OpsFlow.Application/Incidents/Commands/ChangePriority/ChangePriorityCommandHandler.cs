@@ -35,13 +35,10 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
             User user = _currentUserService.Get();
 
             // checkPermission
-            if (!_permissionService.CanChangePriority(user))
-            {
-                throw new ForbiddenException($"{user.Role} can not change incident priority!");
-            }
+            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
+            _permissionService.CanChangePriority(incident.CreatedById, user);
 
             // changePriority
-            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
             incident.SetPriority(command.toPriority, user.Id);
 
             // addHistory
