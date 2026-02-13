@@ -1,6 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Domain.Entities;
-using OpsFlow.Infrastructure.Persistence.DbContext;
+using OpsFlow.Infrastructure.Persistence.AppContext;
 
 namespace OpsFlow.Infrastructure.Persistence.Repositories
 {
@@ -16,41 +17,27 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(Incident incident)
         {
-            _context.Incidents.Add(incident);
-            await _context.SaveChangesAsync();
+            await _context.Incidents.AddAsync(incident);
         }
     
         public async Task UpdateAsync(Incident incident)
         {
-            _context.Entry(incident).State = EntityState.Modified;
-            _context.SaveChangesAsync();
+            _context.Incidents.Update(incident);
         }
 
-        public async Incident GetByIdAsync(int incidentId)
+        public async Task<Incident> GetByIdAsync(int incidentId)
         {
-            return _context.Incidents.FindAsync(incidentId);
+            return await _context.Incidents.FindAsync(incidentId);
         }
 
-        public async Incident GetWithTaskId(int taskId)
+        public async Task<List<Incident>> GetAllAsync()
         {
-            return _context.Incidents.FindAsync(taskId);
+            return await _context.Incidents.ToListAsync();
         }
 
-        public async List<Task> GetTasksAsync(int incidentId)
+        public async Task DeleteAsync(Incident incident)
         {
-            return _context.Incidents.FindAsync(incidentId);
-        }
-
-        public async List<User> GetUsersAsync(int incidentId)
-        {
-            return _context.Incidents.FindAsync(incidentId);
-        }
-
-        public async Task DeleteAsync(int incidentId)
-        {
-            Incident incident = _context.Incidents.FindAsync(incidentId);
-            _context.DeleteAsync(incident);
-            _context.SaveChanges();
+            _context.Incidents.Remove(incident);
         }
     }
 }
