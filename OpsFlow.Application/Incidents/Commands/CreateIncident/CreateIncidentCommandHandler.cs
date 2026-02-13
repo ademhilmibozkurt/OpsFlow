@@ -10,19 +10,19 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
     public class CreateIncidentCommandHandler
     {
         private readonly IIncidentRepository _incidentRepository;
-        private readonly IIncidentHistoryRepository _incidentHistoryRepository;
+        private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
 
         // dependency injection
         public CreateIncidentCommandHandler(
             IIncidentRepository incidentRepository,
-            IIncidentHistoryRepository incidentHistoryRepository,
+            IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUser,
             IPermissionService permissionService)
         {
             _incidentRepository = incidentRepository;
-            _incidentHistoryRepository = incidentHistoryRepository;
+            _historyRepository = historyRepository;
             _currentUser = currentUser;
             _permissionService = permissionService;
         }
@@ -44,7 +44,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
 
             // addHistory
             IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Open, DateTime.UtcNow);
-            await _incidentHistoryRepository.AddAsync(history);
+            await _historyRepository.AddAsync(history);
 
             return incident.Id;
         }

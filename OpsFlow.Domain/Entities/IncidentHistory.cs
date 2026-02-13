@@ -37,6 +37,18 @@ namespace OpsFlow.Domain.Entities
             _taskId = taskId;
         }
 
+        private IncidentHistory(int incidentId, int performedById, IncidentPriority eventType, DateTime occuredAt)
+        {
+            // every event is splitted.
+            EnsureIdPositive(incidentId, "incidentId");
+            EnsureIdPositive(performedById, "performedById");
+
+            _incidentId = incidentId;
+            _performedById = performedById;
+            _eventType  = eventType;
+            _occuredAt  = occuredAt;
+        }
+
         // add incident history with factory
         public static IncidentHistory AddIncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
         {
@@ -48,6 +60,11 @@ namespace OpsFlow.Domain.Entities
         {
 
             return new IncidentHistory(incidentId, performedById, eventType, occuredAt, taskId);
+        }
+
+        public static IncidentHistory AddPriorityHistory(int incidentId, int performedById, IncidentPriority eventType, DateTime occuredAt)
+        {
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt);
         }
 
         private void EnsureIdPositive(int id, string name)
