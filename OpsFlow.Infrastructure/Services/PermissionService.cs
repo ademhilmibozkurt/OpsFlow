@@ -30,7 +30,15 @@ namespace OpsFlow.Infrastructure.Services
         {
             if (user.Role == Roles.User)
             {
-                throw new ForbiddenException("User not allow the close incidents!");
+                throw new ForbiddenException("User not allow to close incidents!");
+            }
+        }
+
+        public void CanAbortIncident(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException("User not allow to abort incidents!");
             }
         }
     }
