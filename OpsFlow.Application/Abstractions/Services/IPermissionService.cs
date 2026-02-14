@@ -8,5 +8,6 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanChangePriority(int createdById, User user);
         void CanCloseIncident(User user);
         void CanAbortIncident(User user);
+        void CanInvestigateIncident(User user);
     }
 }

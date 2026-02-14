@@ -11,7 +11,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
-        private readonly ICurrentUserService _currentUser;
+        private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -19,13 +19,13 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         public CreateIncidentCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
-            ICurrentUserService currentUser,
+            ICurrentUserService currentUserService,
             IPermissionService permissionService,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
-            _currentUser = currentUser;
+            _currentUserService = currentUserService;
             _permissionService = permissionService;
             _unitOfWork = unitOfWork;
         }
@@ -33,7 +33,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         public async Task<int> Handle(CreateIncidentCommand command)
         {
             // getCurrentUser
-            var user = _currentUser.Get();
+            var user = _currentUserService.Get();
 
             // checkPermission
             _permissionService.CanCreateIncident(user);

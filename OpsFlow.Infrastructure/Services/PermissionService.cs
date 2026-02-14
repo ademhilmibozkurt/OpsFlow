@@ -36,7 +36,15 @@ namespace OpsFlow.Infrastructure.Services
 
         public void CanAbortIncident(User user)
         {
-            if (user.Role == Roles.User)
+            if (user.Role != Roles.Admin)
+            {
+                throw new ForbiddenException("User not allow to abort incidents!");
+            }
+        }
+
+        public void CanInvestigateIncident(User user)
+        {
+            if (user.Role != Roles.IncidentManager)
             {
                 throw new ForbiddenException("User not allow to abort incidents!");
             }
