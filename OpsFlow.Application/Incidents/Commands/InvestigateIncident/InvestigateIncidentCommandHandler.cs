@@ -11,18 +11,21 @@ namespace OpsFlow.Application.Incidents.Commands.InvestigateIncident
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
+        private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
         public InvestigateIncidentCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
             IPermissionService permissionService,
+            IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
             _permissionService = permissionService;
+            _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
 
@@ -39,7 +42,7 @@ namespace OpsFlow.Application.Incidents.Commands.InvestigateIncident
             incident.Investigate(user.Id);
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(command.incidentId, user.Id, IncidentState.Investigating, DateTime.UtcNow);
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(command.incidentId, user.Id, IncidentState.Investigating, _timeProvider.Now());
             await _historyRepository.AddAsync(history);
 
             // save

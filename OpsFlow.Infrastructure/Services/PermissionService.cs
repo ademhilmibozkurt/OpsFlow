@@ -38,7 +38,7 @@ namespace OpsFlow.Infrastructure.Services
         {
             if (user.Role != Roles.Admin)
             {
-                throw new ForbiddenException("User not allow to abort incidents!");
+                throw new ForbiddenException($"{user.Role} not allow to abort incidents!");
             }
         }
 
@@ -46,7 +46,7 @@ namespace OpsFlow.Infrastructure.Services
         {
             if (user.Role != Roles.IncidentManager)
             {
-                throw new ForbiddenException("User not allow to abort incidents!");
+                throw new ForbiddenException($"{user.Role} not allow to investigate incidents!");
             }
         }
     }

@@ -13,6 +13,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
+        private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
 
         // dependency injection
@@ -21,12 +22,14 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
             IPermissionService permissionService,
+            IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
             _permissionService = permissionService;
+            _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
 
@@ -43,7 +46,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             await _incidentRepository.AddAsync(incident);
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Open, DateTime.UtcNow);
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Open, _timeProvider.Now());
             await _historyRepository.AddAsync(history);
 
             // save
