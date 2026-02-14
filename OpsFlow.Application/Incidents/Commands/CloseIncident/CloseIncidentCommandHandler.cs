@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Domain.Entities;
@@ -45,6 +44,7 @@ namespace OpsFlow.Application.Incidents.Commands.CloseIncident
             await _historyRepository.AddAsync(history);
 
             // save
+            _unitOfWork.Commit();
 
             return incident.Id;
         }

@@ -25,5 +25,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{user.Role} can not change incident priority!");
             }
         }
+
+        public void CanCloseIncident(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException("User not allow the close incidents!");
+            }
+        }
     }
 }
