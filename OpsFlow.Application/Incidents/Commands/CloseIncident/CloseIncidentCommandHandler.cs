@@ -40,7 +40,7 @@ namespace OpsFlow.Application.Incidents.Commands.CloseIncident
 
             // closeIncident
             Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
-            incident.Close(EnsureTasksDone(incident.Id), user.Id);
+            incident.Close(user.Id);
 
             // addHistory
             IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Closed, _timeProvider.Now());
@@ -50,11 +50,6 @@ namespace OpsFlow.Application.Incidents.Commands.CloseIncident
             _unitOfWork.Commit();
 
             return incident.Id;
-        }
-
-        private bool EnsureTasksDone(int incidentId)
-        {
-            return false;
         }
     }
 }

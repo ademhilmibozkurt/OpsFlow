@@ -14,6 +14,7 @@ namespace OpsFlow.Domain.Entities
         private int _settedById;
         private IncidentPriority _priority;
         private IncidentState _state;
+        private List<IncidentTask> _tasks;
 
         public string Title => _title;
         public string Description => _description;
@@ -46,7 +47,7 @@ namespace OpsFlow.Domain.Entities
                 throw new ArgumentException($"-{name}- can not be empty!");
         }
 
-        public void Close(bool isTasksDone, int performedById)
+        public void Close(int performedById)
         {
             if (_state == IncidentState.Aborted || _state == IncidentState.Closed)
             {
@@ -56,10 +57,8 @@ namespace OpsFlow.Domain.Entities
             {
                 throw new InvalidOperationException("Incident not investigated yet. Can not close!");
             }
-            if(!isTasksDone)
-            {
-                throw new InvalidOperationException("Incident can not close because all tasks are not done yet!");
-            }
+            
+            EnsureTasksDone();
             _state = IncidentState.Closed;
             _closedById = performedById;
         }
@@ -93,5 +92,26 @@ namespace OpsFlow.Domain.Entities
             _priority = toPriority;
             _settedById = performedById;
         } 
+
+        public void AddTask(IncidentTask task)
+        {
+            if (_state != IncidentState.Open)
+            {
+                throw new InvalidOperationException("Incident is not open. Can not add task!");
+            }
+
+            _tasks.Append(task);
+        }
+
+        public void EnsureTasksDone()
+        {
+            foreach(IncidentTask task in _tasks)
+            {
+                if (task.TaskState != IncidentTaskState.Done)
+                {
+                    throw new InvalidOperationException("All tasks are not done. Can not close the incident!");
+                }
+            }
+        }
     }
 }

@@ -18,31 +18,19 @@ namespace OpsFlow.Domain.Entities
         public string Note => _note;
         public IncidentTaskState TaskState => _taskState;
 
-        private IncidentTask(Incident incident, string title, string note = "")
+        private IncidentTask(int incidentId, string title, string note = "")
         {
-            // ensure incident exists. readonly property only set in ctor.
-            _incident = incident ?? throw new ArgumentNullException(nameof(incident));
-
-            EnsureIncidentIsOpen();
             EnsureTitleIsValid(title);
             
             _title = title;
             _note  = note;
-            _incidentId = _incident.Id;
+            _incidentId = incidentId;
             _taskState = IncidentTaskState.Assigned;
         }
 
-        public static IncidentTask Create(Incident incident, string title, string note = "")
+        public static IncidentTask Create(int incidentId, string title, string note = "")
         {
-            return new IncidentTask(incident, title, note);
-        }
-
-        private void EnsureIncidentIsOpen()
-        {
-            if (_incident.State != IncidentState.Open)
-            {
-                throw new InvalidOperationException("Incident is not open!");
-            }
+            return new IncidentTask(incidentId, title, note);
         }
 
         private void EnsureTitleIsValid(string title)
@@ -82,8 +70,6 @@ namespace OpsFlow.Domain.Entities
 
         private void ChangeState(IncidentTaskState fromState, IncidentTaskState toState, string errorMessage)
         {
-            EnsureIncidentIsOpen();
-
             if (_taskState != fromState)
             {
                 throw new InvalidOperationException(errorMessage);
