@@ -49,5 +49,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{user.Role} not allow to investigate incidents!");
             }
         }
+
+        public void CanCreateTask(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException($"{user.Role} can not create task!");
+            }
+        }
     }
 }

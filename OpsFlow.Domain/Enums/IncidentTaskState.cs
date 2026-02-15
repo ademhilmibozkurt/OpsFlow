@@ -2,9 +2,10 @@ namespace OpsFlow.Domain.Enums
 {
     public enum IncidentTaskState
     {
-        Assigned = 1,
-        InProgress = 2,
-        Done = 3,
-        Aborted = 4
+        Created = 1,
+        Assigned = 2,
+        InProgress = 3,
+        Done = 4,
+        Aborted = 5
     }
 }
