@@ -81,5 +81,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"User {user.Id} can not close task. User not assigned the task!");
             }
         }
+
+        public void CanAbortTask(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException("User can not abort task!");
+            }
+        }
     }
 }

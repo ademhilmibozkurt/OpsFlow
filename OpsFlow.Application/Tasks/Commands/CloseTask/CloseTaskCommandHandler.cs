@@ -29,6 +29,7 @@ namespace OpsFlow.Application.Tasks.Commands.CloseTask
             _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
+        
         public async Task<int> Handle(CloseTaskCommand command)
         {
             // getCurrentUser
