@@ -57,5 +57,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{user.Role} can not create task!");
             }
         }
+
+        public void CanAssignTask(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException($"{user.Role} can not assign task to someone!");
+            }
+        }
     }
 }

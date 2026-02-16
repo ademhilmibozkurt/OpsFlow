@@ -41,6 +41,9 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             // checkPermission
             _permissionService.CanCreateIncident(user);
 
+            // setTaskId- !!! TASK ID NASIL GELECEK DÜŞÜN !!!
+            
+
             // createIncident
             Incident incident =  Incident.Create(command.title, command.description, user.Id);
             await _incidentRepository.AddAsync(incident);

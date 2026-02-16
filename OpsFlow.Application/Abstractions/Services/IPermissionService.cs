@@ -13,5 +13,6 @@ namespace OpsFlow.Application.Abstractions.Services
     
         // tasks
         void CanCreateTask(User user);
+        void CanAssignTask(User user);
     }
 }

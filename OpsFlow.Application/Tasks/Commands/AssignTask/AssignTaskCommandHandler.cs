@@ -3,20 +3,19 @@ using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
-namespace OpsFlow.Application.Tasks.Commands.CreateTask
+namespace OpsFlow.Application.Tasks.Commands.AssignTask
 {
-    public class CreateTaskCommandHandler
+    public class AssignTaskCommandHandler
     {
         private readonly IIncidentTaskRepository _taskRepository;
-        private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
-        public CreateTaskCommandHandler(
+
+        public AssignTaskCommandHandler(
             IIncidentTaskRepository taskRepository,
-            IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
             IPermissionService permissionService,
@@ -24,7 +23,6 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             IUnitOfWork unitOfWork)
         {
             _taskRepository = taskRepository;
-            _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
             _permissionService = permissionService;
@@ -32,41 +30,26 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateTaskCommand command)
+        public async Task<int> Handle(AssignTaskCommand command)
         {
             // getCurrentUser
             User user = _currentUserService.Get();
 
             // checkPermission
-            _permissionService.CanCreateTask(user);
+            _permissionService.CanAssignTask(user);
 
-            // checkIncident
-            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
-            EnsureIncidentOpen(incident);
+            // assignTask
+            IncidentTask task = await _taskRepository.GetByIdAsync(command.taskId);
+            task.Assign(command.userId);
 
-            // setTaskId- !!! TASK ID NASIL GELECEK DÜŞÜN !!!
-            
-
-            // createTask
-            IncidentTask task = IncidentTask.Create(command.incidentId, command.title, command.note);
-            await _taskRepository.AddAsync(task);
-
-            // addHistory 
-            IncidentHistory history = IncidentHistory.AddTaskHistory(incident.Id, user.Id, IncidentTaskState.Created, _timeProvider.Now(), task.Id);
+            // addHistory
+            IncidentHistory history = IncidentHistory.AddTaskHistory(task.IncidentId, user.Id, IncidentTaskState.Assigned, _timeProvider.Now(), task.Id);
             await _historyRepository.AddAsync(history);
 
             // save
             _unitOfWork.Commit();
 
             return task.Id;
-        }
-
-        private void EnsureIncidentOpen(Incident incident)
-        {
-            if (incident.State != IncidentState.Open)
-            {
-                throw new InvalidOperationException("Incident is not open. Can not add task!");
-            }
         }
     }
 }
