@@ -73,5 +73,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"User {user.Id} can not start task. User not assigned the task!");
             }
         }
+
+        public void CanCloseTask(User user, int assignedId)
+        {
+            if (user.Id != assignedId)
+            {
+                throw new ForbiddenException($"User {user.Id} can not close task. User not assigned the task!");
+            }
+        }
     }
 }
