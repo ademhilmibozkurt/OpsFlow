@@ -7,6 +7,7 @@ namespace OpsFlow.Infrastructure.Services
 {
     public class PermissionService : IPermissionService
     {
+        // incidents
         public void CanCreateIncident(User user)
         {
             // every role can create incident
@@ -50,6 +51,16 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        public void CanDeleteIncident(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException($"{user.Role} not allow to de incidents!");
+            }
+        }
+
+
+        // tasks
         public void CanCreateTask(User user)
         {
             if (user.Role == Roles.User)

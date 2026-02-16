@@ -10,6 +10,7 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanCloseIncident(User user);
         void CanAbortIncident(User user);
         void CanInvestigateIncident(User user);
+        void CanDeleteIncident(User user);
     
         // tasks
         void CanCreateTask(User user);

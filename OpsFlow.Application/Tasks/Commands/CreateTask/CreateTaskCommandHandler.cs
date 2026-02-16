@@ -41,11 +41,9 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
             EnsureIncidentOpen(incident);
 
-            // setTaskId- !!! TASK ID NASIL GELECEK DÜŞÜN !!!
-            
-
             // createTask
             IncidentTask task = IncidentTask.Create(command.incidentId, command.title, command.note);
+            task.CreatedAt = _timeProvider.Now();
             incident.AddTask(task);
 
             // addHistory 

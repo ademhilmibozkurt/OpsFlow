@@ -11,6 +11,7 @@ namespace OpsFlow.Domain.Entities
         private int _invastigateById;
         private int _closedById;
         private int _abortedById;
+        private int _deletedById;
         private int _settedById;
         private IncidentPriority _priority;
         private IncidentState _state;
@@ -81,6 +82,17 @@ namespace OpsFlow.Domain.Entities
             }
             _state = IncidentState.Aborted;
             _abortedById = performedById;
+        }
+
+        public void Delete(int performedById)
+        {
+            if (_state != IncidentState.Aborted || _state != IncidentState.Closed)
+            {
+                throw new InvalidOperationException($"{_state} incident can not delete!");
+            }
+            IsDeleted = true;
+            _state = IncidentState.Deleted;
+            _deletedById = performedById;
         }
 
         public void SetPriority(IncidentPriority toPriority, int performedById)

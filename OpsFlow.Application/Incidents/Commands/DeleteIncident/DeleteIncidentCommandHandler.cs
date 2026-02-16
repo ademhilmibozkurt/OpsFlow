@@ -3,9 +3,9 @@ using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
-namespace OpsFlow.Application.Incidents.Commands.CreateIncident
+namespace OpsFlow.Application.Incidents.Commands.DeleteIncident
 {
-    public class CreateIncidentCommandHandler
+    public class DeleteIncidentCommandHandler
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -13,9 +13,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         private readonly IPermissionService _permissionService;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
-
-        // dependency injection
-        public CreateIncidentCommandHandler(
+        public DeleteIncidentCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
@@ -31,24 +29,18 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateIncidentCommand command)
+        public async Task<int> Handle(DeleteIncidentCommand command)
         {
-            // getCurrentUser
-            var user = _currentUserService.Get();
+            User user = _currentUserService.Get();
 
-            // checkPermission
-            _permissionService.CanCreateIncident(user);
+            _permissionService.CanDeleteIncident(user);
 
-            // createIncident
-            Incident incident =  Incident.Create(command.title, command.description, user.Id);
-            incident.CreatedAt = _timeProvider.Now();
-            await _incidentRepository.AddAsync(incident);
+            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
+            incident.Delete(user.Id);
 
-            // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Open, _timeProvider.Now());
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Deleted, _timeProvider.Now());
             await _historyRepository.AddAsync(history);
 
-            // save
             _unitOfWork.Commit();
 
             return incident.Id;
