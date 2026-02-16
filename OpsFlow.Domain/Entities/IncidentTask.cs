@@ -4,14 +4,14 @@ namespace OpsFlow.Domain.Entities
 {
     public class IncidentTask : BaseEntity
     {
-        // incident has not change after entity created
-        private readonly Incident _incident;
         private int _incidentId;
-
-        private string _title = "";
+        private string _title;
         private string _note = "";
         private IncidentTaskState _taskState;
         private int _assignedId;
+        private int _startedById;
+        private int _finishedById;
+        private int _abortedById;
 
         // properties can read-only outside the class
         public int IncidentId => _incidentId;
@@ -51,23 +51,27 @@ namespace OpsFlow.Domain.Entities
             _assignedId = assignedId;
         }
 
-        public void Start()
+        public void Start(int performedById)
         {
             ChangeState(
                 IncidentTaskState.Assigned,
                 IncidentTaskState.InProgress,
-                $"Task state is {_taskState}. Task can not start!");
+                $"Task state is {_taskState}. Task can not start!"
+            );
+            _startedById = performedById;
         }
 
-        public void Finish()
+        public void Finish(int performedById)
         {
             ChangeState(
                 IncidentTaskState.InProgress,
                 IncidentTaskState.Done,
-                $"Task state is {_taskState}. Task can not finish!");
+                $"Task state is {_taskState}. Task can not finish!"
+            );
+            _finishedById = performedById;
         }
 
-        public void Abort()
+        public void Abort(int performedById)
         {
             if (_taskState != IncidentTaskState.Assigned && _taskState != IncidentTaskState.InProgress)
             {
@@ -77,7 +81,9 @@ namespace OpsFlow.Domain.Entities
             ChangeState(
                 _taskState,
                 IncidentTaskState.Aborted,
-                $"Task state is {_taskState}. Abortion can not done!");
+                $"Task state is {_taskState}. Abortion can not done!"
+            );
+            _abortedById = performedById;
         }
 
         private void ChangeState(IncidentTaskState fromState, IncidentTaskState toState, string errorMessage)

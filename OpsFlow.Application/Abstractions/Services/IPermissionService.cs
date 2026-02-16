@@ -14,5 +14,6 @@ namespace OpsFlow.Application.Abstractions.Services
         // tasks
         void CanCreateTask(User user);
         void CanAssignTask(User user);
+        void CanStartTask(User user, int assignedId);
     }
 }
