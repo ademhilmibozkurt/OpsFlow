@@ -7,7 +7,6 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
 {
     public class CreateTaskCommandHandler
     {
-        private readonly IIncidentTaskRepository _taskRepository;
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
@@ -15,7 +14,6 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
         public CreateTaskCommandHandler(
-            IIncidentTaskRepository taskRepository,
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
@@ -23,7 +21,6 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
-            _taskRepository = taskRepository;
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
@@ -49,7 +46,7 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
 
             // createTask
             IncidentTask task = IncidentTask.Create(command.incidentId, command.title, command.note);
-            await _taskRepository.AddAsync(task);
+            incident.AddTask(task);
 
             // addHistory 
             IncidentHistory history = IncidentHistory.AddTaskHistory(incident.Id, user.Id, IncidentTaskState.Created, _timeProvider.Now(), task.Id);

@@ -103,6 +103,12 @@ namespace OpsFlow.Domain.Entities
             _tasks.Append(task);
         }
 
+        public IncidentTask GetTask(int taskId)
+        {
+            IncidentTask task = _tasks.Find(t => t.Id == taskId) ?? throw new NullReferenceException($"{taskId} is not found. Task is null!");
+            return task;
+        }
+
         public void EnsureTasksDone()
         {
             foreach(IncidentTask task in _tasks)

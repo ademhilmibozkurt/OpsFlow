@@ -7,7 +7,7 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
 {
     public class AssignTaskCommandHandler
     {
-        private readonly IIncidentTaskRepository _taskRepository;
+        private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IPermissionService _permissionService;
@@ -15,14 +15,14 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
         private readonly IUnitOfWork _unitOfWork;
 
         public AssignTaskCommandHandler(
-            IIncidentTaskRepository taskRepository,
+            IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
             ICurrentUserService currentUserService,
             IPermissionService permissionService,
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
-            _taskRepository = taskRepository;
+            _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
             _currentUserService = currentUserService;
             _permissionService = permissionService;
@@ -39,8 +39,9 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
             _permissionService.CanAssignTask(user);
 
             // assignTask
-            IncidentTask task = await _taskRepository.GetByIdAsync(command.taskId);
-            task.Assign(command.userId);
+            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
+            IncidentTask task = incident.GetTask(command.taskId);
+            task.Assign(user.Id);
 
             // addHistory
             IncidentHistory history = IncidentHistory.AddTaskHistory(task.IncidentId, user.Id, IncidentTaskState.Assigned, _timeProvider.Now(), task.Id);

@@ -1,4 +1,4 @@
 namespace OpsFlow.Application.Tasks.Commands.AssignTask
 {
-    public record AssignTaskCommand(int userId, int taskId);
+    public record AssignTaskCommand(int incidentId, int taskId, int userId);
 }
