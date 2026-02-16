@@ -55,7 +55,7 @@ namespace OpsFlow.Infrastructure.Services
         {
             if (user.Role == Roles.User)
             {
-                throw new ForbiddenException($"{user.Role} not allow to de incidents!");
+                throw new ForbiddenException($"{user.Role} not allow to delete incidents!");
             }
         }
 
@@ -100,5 +100,14 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException("User can not abort task!");
             }
         }
+
+        public void CanDeleteTask(User user)
+        {
+            if (user.Role == Roles.User)
+            {
+                throw new ForbiddenException("User can not delete task!");
+            }
+        }
+
     }
 }

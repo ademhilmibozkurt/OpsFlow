@@ -43,7 +43,7 @@ namespace OpsFlow.Application.Tasks.Commands.CloseTask
             _permissionService.CanCloseTask(user, task.AssignedId);
 
             // finishTask
-            task.Finish(user.Id);
+            task.Close(user.Id);
 
             // addHistory
             IncidentHistory history = IncidentHistory.AddTaskHistory(incident.Id, user.Id, IncidentTaskState.Done, _timeProvider.Now(), task.Id);

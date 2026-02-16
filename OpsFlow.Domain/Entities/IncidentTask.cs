@@ -12,6 +12,7 @@ namespace OpsFlow.Domain.Entities
         private int _startedById;
         private int _finishedById;
         private int _abortedById;
+        private int _deletedById;
 
         // properties can read-only outside the class
         public int IncidentId => _incidentId;
@@ -61,7 +62,7 @@ namespace OpsFlow.Domain.Entities
             _startedById = performedById;
         }
 
-        public void Finish(int performedById)
+        public void Close(int performedById)
         {
             ChangeState(
                 IncidentTaskState.InProgress,
@@ -84,6 +85,17 @@ namespace OpsFlow.Domain.Entities
                 $"Task state is {_taskState}. Abortion can not done!"
             );
             _abortedById = performedById;
+        }
+
+        public void Delete(int performedById)
+        {
+            if (_taskState != IncidentTaskState.Done && _taskState != IncidentTaskState.Aborted)
+            {
+                throw new InvalidOperationException($"{_taskState} task can not delete!");
+            }
+            IsDeleted = true;
+            _taskState = IncidentTaskState.Deleted;
+            _deletedById = performedById;
         }
 
         private void ChangeState(IncidentTaskState fromState, IncidentTaskState toState, string errorMessage)

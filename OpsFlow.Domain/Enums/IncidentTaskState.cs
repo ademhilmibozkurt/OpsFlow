@@ -6,6 +6,7 @@ namespace OpsFlow.Domain.Enums
         Assigned = 2,
         InProgress = 3,
         Done = 4,
-        Aborted = 5
+        Aborted = 5,
+        Deleted = 6
     }
 }
