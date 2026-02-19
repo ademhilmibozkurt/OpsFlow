@@ -5,19 +5,19 @@ namespace OpsFlow.Application.Abstractions.Services
     public interface IPermissionService
     {
         // incidents
-        void CanCreateIncident(User user);
-        void CanChangePriority(int createdById, User user);
-        void CanCloseIncident(User user);
-        void CanAbortIncident(User user);
-        void CanInvestigateIncident(User user);
-        void CanDeleteIncident(User user);
+        void CanCreateIncident(string userRole);
+        void CanChangePriority(string userRole, string userId, string createdById);
+        void CanCloseIncident(string userRole);
+        void CanAbortIncident(string userRole);
+        void CanInvestigateIncident(string userRole);
+        void CanDeleteIncident(string userRole);
     
         // tasks
-        void CanCreateTask(User user);
-        void CanAssignTask(User user);
-        void CanStartTask(User user, int assignedId);
-        void CanCloseTask(User user, int assignedId);
-        void CanAbortTask(User user);
-        void CanDeleteTask(User user);
+        void CanCreateTask(string userRole);
+        void CanAssignTask(string userRole);
+        void CanStartTask(string userId, string assignedId);
+        void CanCloseTask(string userId, string assignedId);
+        void CanAbortTask(string userRole);
+        void CanDeleteTask(string userRole);
     }
 }

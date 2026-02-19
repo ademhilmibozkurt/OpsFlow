@@ -8,102 +8,102 @@ namespace OpsFlow.Infrastructure.Services
     public class PermissionService : IPermissionService
     {
         // incidents
-        public void CanCreateIncident(User user)
+        public void CanCreateIncident(string userRole)
         {
             // every role can create incident
             // method should stay for future changes
             return;
         }
 
-        public void CanChangePriority(int createdById, User user)
+        public void CanChangePriority(string userRole, string userId, string createdById)
         {
-            if (createdById == user.Id)
+            if (createdById == userId)
             {
                 return;
             }
-            else if (user.Role == Roles.User)
+            else if (userRole == "User")
             {
-                throw new ForbiddenException($"{user.Role} can not change incident priority!");
+                throw new ForbiddenException($"{userRole} can not change incident priority!");
             }
         }
 
-        public void CanCloseIncident(User user)
+        public void CanCloseIncident(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
                 throw new ForbiddenException("User not allow to close incidents!");
             }
         }
 
-        public void CanAbortIncident(User user)
+        public void CanAbortIncident(string userRole)
         {
-            if (user.Role != Roles.Admin)
+            if (userRole != "Admin")
             {
-                throw new ForbiddenException($"{user.Role} not allow to abort incidents!");
+                throw new ForbiddenException($"{userRole} not allow to abort incidents!");
             }
         }
 
-        public void CanInvestigateIncident(User user)
+        public void CanInvestigateIncident(string userRole)
         {
-            if (user.Role != Roles.IncidentManager)
+            if (userRole != "IncidentManager")
             {
-                throw new ForbiddenException($"{user.Role} not allow to investigate incidents!");
+                throw new ForbiddenException($"{userRole} not allow to investigate incidents!");
             }
         }
 
-        public void CanDeleteIncident(User user)
+        public void CanDeleteIncident(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
-                throw new ForbiddenException($"{user.Role} not allow to delete incidents!");
+                throw new ForbiddenException($"{userRole} not allow to delete incidents!");
             }
         }
 
 
         // tasks
-        public void CanCreateTask(User user)
+        public void CanCreateTask(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
-                throw new ForbiddenException($"{user.Role} can not create task!");
+                throw new ForbiddenException($"{userRole} can not create task!");
             }
         }
 
-        public void CanAssignTask(User user)
+        public void CanAssignTask(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
-                throw new ForbiddenException($"{user.Role} can not assign task to someone!");
+                throw new ForbiddenException($"{userRole} can not assign task to someone!");
             }
         }
 
-        public void CanStartTask(User user, int assignedId)
+        public void CanStartTask(string userId, string assignedId)
         {
-            if (user.Id != assignedId)
+            if (userId != assignedId)
             {
-                throw new ForbiddenException($"User {user.Id} can not start task. User not assigned the task!");
+                throw new ForbiddenException($"User {userId} can not start task. User not assigned the task!");
             }
         }
 
-        public void CanCloseTask(User user, int assignedId)
+        public void CanCloseTask(string userId, string assignedId)
         {
-            if (user.Id != assignedId)
+            if (userId != assignedId)
             {
-                throw new ForbiddenException($"User {user.Id} can not close task. User not assigned the task!");
+                throw new ForbiddenException($"User {userId} can not close task. User not assigned the task!");
             }
         }
 
-        public void CanAbortTask(User user)
+        public void CanAbortTask(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
                 throw new ForbiddenException("User can not abort task!");
             }
         }
 
-        public void CanDeleteTask(User user)
+        public void CanDeleteTask(string userRole)
         {
-            if (user.Role == Roles.User)
+            if (userRole == "User")
             {
                 throw new ForbiddenException("User can not delete task!");
             }
