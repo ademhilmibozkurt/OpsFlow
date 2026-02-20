@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Domain.Entities;
+using OpsFlow.Infrastructure.Identity;
 
 namespace OpsFlow.Infrastructure.Persistence.AppContext
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
