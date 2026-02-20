@@ -4,6 +4,6 @@ namespace OpsFlow.Infrastructure.Identity
 {
     public class AppUser : IdentityUser
     {
-        
+        public string UserName {get; set;}
     }
 }

@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // dependency injection
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
+builder.Services.AddScoped<IIncidentHistoryRepository, IncidentHistoryRepository>();
 
 // add Identity
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
@@ -41,5 +42,4 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
-app.UseAuthentication();
 app.Run();
