@@ -36,8 +36,11 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
             // getCurrentUser
             var user = _currentUserService.Get();
 
+            // checkUserRole
+            // string userRole = _userRepository.GetByIdAsync(user.Id);
+
             // checkPermission
-            _permissionService.CanCreateIncident(user);
+            _permissionService.CanCreateIncident();
 
             // createIncident
             Incident incident =  Incident.Create(command.title, command.description, user.Id);

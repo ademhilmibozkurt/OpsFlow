@@ -4,6 +4,7 @@ namespace OpsFlow.Infrastructure.Identity
 {
     public class AppUser : IdentityUser
     {
-        public string UserName {get; set;}
+        public DateTime CreatedAt {get; set;}
+        public string Role {get; set;}
     }
 }

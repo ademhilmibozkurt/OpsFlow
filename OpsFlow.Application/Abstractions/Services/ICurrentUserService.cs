@@ -1,9 +1,9 @@
-using OpsFlow.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace OpsFlow.Application.Abstractions.Services
 {
     public interface ICurrentUserService
     {
-        public User Get();
+        public IdentityUser Get();
     }
 }
