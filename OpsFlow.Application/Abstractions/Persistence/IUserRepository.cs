@@ -1,4 +1,4 @@
-using OpsFlow.Infrastructure.Identity;
+using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Application.Abstractions.Persistence
 {

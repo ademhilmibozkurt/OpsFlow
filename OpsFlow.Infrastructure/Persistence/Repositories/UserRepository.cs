@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Abstractions.Persistence;
-using OpsFlow.Infrastructure.Identity;
+using OpsFlow.Application.Identity;
 using OpsFlow.Infrastructure.Persistence.AppContext;
 
 namespace OpsFlow.Infrastructure.Persistence.Repositories

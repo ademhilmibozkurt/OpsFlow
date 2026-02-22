@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Identity;
+using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Application.Abstractions.Services
 {
     public interface ICurrentUserService
     {
-        public IdentityUser Get();
+        public AppUser Get();
     }
 }

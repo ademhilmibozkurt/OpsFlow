@@ -1,6 +1,6 @@
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
-using OpsFlow.Infrastructure.Identity;
+using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Application.Users.Commands.Register
 {
@@ -22,15 +22,14 @@ namespace OpsFlow.Application.Users.Commands.Register
 
         public async Task Handle(RegisterCommand command)
         {
-            // validateValues
-
             // createUser
             AppUser user = new AppUser
             {
+                FullName = command.fullName,
                 UserName = command.userName,
+                Password 
                 Email    = command.email,
                 PhoneNumber = command.phoneNumber,
-                Role = AppRole.User,
                 CreatedAt = _timeProvider.Now()
             };
 

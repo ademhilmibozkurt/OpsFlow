@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace OpsFlow.Infrastructure.Identity
+namespace OpsFlow.Application.Identity
 {
     public class AppRole : IdentityRole
     {
