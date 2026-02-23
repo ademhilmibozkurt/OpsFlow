@@ -1,11 +1,13 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Commands.AbortIncident
 {
-    public class AbortIncidentCommandHandler
+    public class AbortIncidentCommandHandler : IRequestHandler<AbortIncidentCommand, AbortIncidentResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -29,7 +31,7 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(AbortIncidentCommand command)
+        public Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             User user = _currentUserService.Get();

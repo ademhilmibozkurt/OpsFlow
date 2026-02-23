@@ -1,11 +1,13 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Commands.DeleteIncident
 {
-    public class DeleteIncidentCommandHandler
+    public class DeleteIncidentCommandHandler : IRequestHandler<DeleteIncidentCommand, DeleteIncidentResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -29,7 +31,7 @@ namespace OpsFlow.Application.Incidents.Commands.DeleteIncident
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(DeleteIncidentCommand command)
+        public Task<DeleteIncidentResponseDto> Handle(DeleteIncidentCommand request, CancellationToken cancellationToken)
         {
             User user = _currentUserService.Get();
 

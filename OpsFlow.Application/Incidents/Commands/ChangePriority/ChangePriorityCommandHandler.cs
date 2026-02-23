@@ -1,10 +1,12 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Commands.ChangePriority
 {
-    public class ChangePriorityCommandHandler
+    public class ChangePriorityCommandHandler : IRequestHandler<ChangePriorityCommand, ChangePriorityResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -30,7 +32,7 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(ChangePriorityCommand command)
+        public Task<ChangePriorityResponseDto> Handle(ChangePriorityCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             User user = _currentUserService.Get();
