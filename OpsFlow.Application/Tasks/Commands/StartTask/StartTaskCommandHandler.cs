@@ -1,12 +1,14 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Tasks.Commands.StartTask;
+using OpsFlow.Application.Tasks.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Tasks.Commands.AssignTask
 {
-    public class StartTaskCommandHandler
+    public class StartTaskCommandHandler : IRequestHandler<StartTaskCommand, StartTaskResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -31,9 +33,9 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(StartTaskCommand command)
+        public Task<StartTaskResponseDto> Handle(StartTaskCommand request, CancellationToken cancellationToken)
         {
-            // getCurrentUser
+             // getCurrentUser
             User user = _currentUserService.Get();
 
             // findTask
@@ -55,6 +57,5 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
 
             return task.Id;
         }
-
     }
 }

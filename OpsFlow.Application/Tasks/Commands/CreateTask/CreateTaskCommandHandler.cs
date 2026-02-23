@@ -1,11 +1,13 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Tasks.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Tasks.Commands.CreateTask
 {
-    public class CreateTaskCommandHandler
+    public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, CreateTaskResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
@@ -29,7 +31,7 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<int> Handle(CreateTaskCommand command)
+        public Task<CreateTaskResponseDto> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             User user = _currentUserService.Get();
