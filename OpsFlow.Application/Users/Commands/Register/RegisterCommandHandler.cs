@@ -8,23 +8,22 @@ namespace OpsFlow.Application.Users.Commands.Register
 {
     public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponseDto>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
 
         public RegisterCommandHandler(
-            IUserRepository userRepository,
+            IUserService userService,
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
-            _userRepository = userRepository;
-            _timeProvider   = timeProvider;
+            _userService = userService;
+            _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
-
-        public async Task Handle(RegisterCommand command)
+        public Task<RegisterResponseDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
-            // createUser
+             // createUser
             AppUser user = new AppUser
             {
                 FullName = command.fullName,
