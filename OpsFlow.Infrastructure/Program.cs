@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Abstractions.Persistence;
+using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Identity;
 using OpsFlow.Infrastructure.Persistence.AppContext;
 using OpsFlow.Infrastructure.Persistence.Repositories;
+using OpsFlow.Infrastructure.Persistence.UnitOfWork;
+using OpsFlow.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +15,25 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString(""));
 });
 
-// dependency injection
+// repositories DI
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 builder.Services.AddScoped<IIncidentHistoryRepository, IncidentHistoryRepository>();
+
+// unitOfWork DI
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// currentUserService DI
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+// dateTimeProvider DI
+builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+
+// permissionService DI
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+// userService DI
+builder.Services.AddScoped<IUserService, UserService>();
 
 // add Identity
 builder.Services.AddIdentity<AppUser, AppRole>(options =>

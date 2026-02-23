@@ -9,22 +9,22 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
-        private readonly ICurrentUserService _currentUserService;
-        private readonly IPermissionService _permissionService;
+        private readonly ICurrentUserService _currentUser;
+        private readonly IPermissionService _permissions;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
         public AbortIncidentCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
-            ICurrentUserService currentUserService,
-            IPermissionService permissionService,
+            ICurrentUserService currentUser,
+            IPermissionService permissions,
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
-            _currentUserService = currentUserService;
-            _permissionService = permissionService;
+            _currentUser = currentUser;
+            _permissions = permissions;
             _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
@@ -35,7 +35,7 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
             User user = _currentUserService.Get();
 
             // chechPermission
-            _permissionService.CanAbortIncident(user);
+            _permissions.CanAbortIncident(user);
 
             // abortIncident
             Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
