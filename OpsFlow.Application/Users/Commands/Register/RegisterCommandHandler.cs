@@ -1,10 +1,12 @@
+using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Identity;
+using OpsFlow.Application.Users.Dtos;
 
 namespace OpsFlow.Application.Users.Commands.Register
 {
-    public class RegisterCommandHandler
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResponseDto>
     {
         private readonly IUserRepository _userRepository;
         private readonly IDateTimeProvider _timeProvider;
