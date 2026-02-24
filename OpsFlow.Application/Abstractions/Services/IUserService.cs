@@ -4,7 +4,7 @@ namespace OpsFlow.Application.Abstractions.Services
 {
     public interface IUserService
     {
-        Task<(bool Success, IEnumerable<string> Errors)> CreateUserAsync
+        Task<AppUser> CreateUserAsync
         (
             string fullName,
             string userName,

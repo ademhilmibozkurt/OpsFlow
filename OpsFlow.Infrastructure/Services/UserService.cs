@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Infrastructure.Services
@@ -14,7 +15,7 @@ namespace OpsFlow.Infrastructure.Services
             _userManager = userManager;
         }
 
-        public async Task<(bool Success, IEnumerable<string> Errors)> CreateUserAsync(string fullName, string userName, string email, string phoneNumber, string password)
+        public async Task<AppUser> CreateUserAsync(string fullName, string userName, string email, string phoneNumber, string password)
         {
             // createAppUserInstance
             AppUser user = new AppUser
@@ -31,14 +32,14 @@ namespace OpsFlow.Infrastructure.Services
             // returnResult - if not succeeded
             if (!result.Succeeded)
             {
-                return (false, result.Errors.Select(e => e.Description));
+                throw new UserCreationException("User not created!");
             }
 
             // addRole - if creation secceded
             await _userManager.AddToRoleAsync(user, AppRole.User);
 
-            // returnResult
-            return (true, Enumerable.Empty<string>());
+            // returnUser
+            return await _userManager.FindByEmailAsync(user.Email);
         }
         
         public async Task<AppUser?> FindByEmailAsync(string email)

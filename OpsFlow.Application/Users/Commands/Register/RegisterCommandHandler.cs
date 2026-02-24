@@ -1,5 +1,4 @@
 using MediatR;
-using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
@@ -34,7 +33,7 @@ namespace OpsFlow.Application.Users.Commands.Register
             // validateParameters
 
             // registerUser
-            var result = await _userService.CreateUserAsync(
+            var user = await _userService.CreateUserAsync(
                 request.fullName,
                 request.userName,
                 request.email,
@@ -42,14 +41,11 @@ namespace OpsFlow.Application.Users.Commands.Register
                 request.password
             );
 
-            // checkCreationSuccess
-            if (result.Success != true)
+            // checkUser
+            if (user == 'null')
             {
-                throw new UserCreationException(result.Errors.ToString());
+                throw new NullReferenceException('User not found!');
             }
-
-            // getUser
-            AppUser user = await _userService.FindByEmailAsync(request.email);
 
             // generateToken
             var token = _tokenService.GenerateTokens(user);
