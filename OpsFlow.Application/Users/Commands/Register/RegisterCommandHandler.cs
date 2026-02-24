@@ -10,14 +10,17 @@ namespace OpsFlow.Application.Users.Commands.Register
     {
         private readonly IUserService _userService;
         private readonly IDateTimeProvider _timeProvider;
+        private readonly ITokenService _tokenService;
 
         public RegisterCommandHandler(
             IUserService userService,
-            IDateTimeProvider timeProvider
+            IDateTimeProvider timeProvider,
+            ITokenService tokenService
             )
         {
             _userService = userService;
             _timeProvider = timeProvider;
+            _tokenService = tokenService;
         }
         public async Task<RegisterResponseDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
@@ -25,9 +28,9 @@ namespace OpsFlow.Application.Users.Commands.Register
             AppUser? existingUser = await _userService.FindByEmailAsync(request.email);
 
             //  return - if existed
-            if (existingUser != 'null')
+            if (existingUser != null)
             {
-                throw new ForbiddenException("Email is already exist!")
+                throw new ForbiddenException("Email is already exist!");
             }
 
             // validateParameters
@@ -42,9 +45,9 @@ namespace OpsFlow.Application.Users.Commands.Register
             );
 
             // checkUser
-            if (user == 'null')
+            if (user == null)
             {
-                throw new NullReferenceException('User not found!');
+                throw new NullReferenceException("User not found!");
             }
 
             // generateToken
