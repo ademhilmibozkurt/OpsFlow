@@ -33,15 +33,18 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
 
         public async Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
         {
-            // chechPermission
+            // chechPermission - !! check current user is null or not !!
             _permissions.CanAbortIncident(_currentUser.Role);
 
-            // abortIncident
+            // abortIncident - !! check is null or not !!
             Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId);
             incident.Abort(_currentUser.UserId);
 
+            // createTimestamp
+            DateTime abortedAt = _timeProvider.Now();
+
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(request.incidentId, _currentUser.UserId, IncidentState.Aborted, _timeProvider.Now(), request.abortionNote);
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(request.incidentId, _currentUser.UserId, IncidentState.Aborted, abortedAt, request.abortionNote);
             await _historyRepository.AddAsync(history);
 
             // save
@@ -53,7 +56,7 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
                 incident.Id,
                 request.abortionNote,
                 _currentUser.UserId,
-                _timeProvider.Now()
+                abortedAt
             );
         }
     }
