@@ -4,86 +4,66 @@ namespace OpsFlow.Domain.Entities
 {
     public class IncidentHistory : BaseEntity
     {
-        private int _incidentId;
+        private string _incidentId;
         private Enum _eventType;
         private DateTime _occuredAt;
-        private int _performedById;
-        private int _taskId;
+        private string _performedById;
+        private string _taskId;
+        private string _note;
 
-        private IncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
+        private IncidentHistory(string incidentId, string performedById, IncidentState eventType, DateTime occuredAt, string note)
         {
-            // every event is splitted.
-            EnsureIdPositive(incidentId, "incidentId");
-            EnsureIdPositive(performedById, "performedById");
-
             _incidentId = incidentId;
             _performedById = performedById;
             _eventType  = eventType;
             _occuredAt  = occuredAt;
+            _note = note;
         }
 
-        private IncidentHistory(int incidentId, int performedById, IncidentTaskState eventType, DateTime occuredAt, int taskId)
+        private IncidentHistory(string incidentId, string performedById, IncidentTaskState eventType, DateTime occuredAt, string taskId, string note)
         {
-            // every event is splitted.
-            EnsureIdPositive(incidentId, "incidentId");
-            EnsureIdPositive(performedById, "performedById");
-
             _incidentId = incidentId;
             _performedById = performedById;
             _eventType  = eventType;
             _occuredAt  = occuredAt;
+            _note = note;
 
             EnsureRelatedTaskId(taskId);
             _taskId = taskId;
         }
 
-        private IncidentHistory(int incidentId, int performedById, IncidentPriority eventType, DateTime occuredAt)
+        private IncidentHistory(string incidentId, string performedById, IncidentPriority eventType, DateTime occuredAt, string note)
         {
-            // every event is splitted.
-            EnsureIdPositive(incidentId, "incidentId");
-            EnsureIdPositive(performedById, "performedById");
-
             _incidentId = incidentId;
             _performedById = performedById;
             _eventType  = eventType;
             _occuredAt  = occuredAt;
+            _note = note;
         }
 
         // add incident history with factory
-        public static IncidentHistory AddIncidentHistory(int incidentId, int performedById, IncidentState eventType, DateTime occuredAt)
+        public static IncidentHistory AddIncidentHistory(string incidentId, string performedById, IncidentState eventType, DateTime occuredAt, string note = "")
         {
-            return new IncidentHistory(incidentId, performedById, eventType, occuredAt);
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt, note);
         }
 
         // add task history with factory
-        public static IncidentHistory AddTaskHistory(int incidentId, int performedById, IncidentTaskState eventType, DateTime occuredAt, int taskId)
+        public static IncidentHistory AddTaskHistory(string incidentId, string performedById, IncidentTaskState eventType, DateTime occuredAt, string taskId, string note = "")
         {
 
-            return new IncidentHistory(incidentId, performedById, eventType, occuredAt, taskId);
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt, taskId, note);
         }
 
-        public static IncidentHistory AddPriorityHistory(int incidentId, int performedById, IncidentPriority eventType, DateTime occuredAt)
+        public static IncidentHistory AddPriorityHistory(string incidentId, string performedById, IncidentPriority eventType, DateTime occuredAt, string note = "")
         {
-            return new IncidentHistory(incidentId, performedById, eventType, occuredAt);
+            return new IncidentHistory(incidentId, performedById, eventType, occuredAt, note);
         }
 
-        private void EnsureIdPositive(int id, string name)
-        {
-            if (id < 0)
-            {
-                throw new ArgumentException($"-{name}- can not be negative numbers!");
-            }
-        }
-
-        private void EnsureRelatedTaskId(int? id)
+        private void EnsureRelatedTaskId(string? id)
         {
             if (id == null)
             {
                 return;
-            }
-            if (id < 0)
-            {
-                throw new ArgumentException("-relatedTaskId- can not be negative numbers!");
             }
         }
     }

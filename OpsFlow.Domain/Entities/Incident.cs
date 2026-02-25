@@ -7,24 +7,24 @@ namespace OpsFlow.Domain.Entities
     {
         private string _title;
         private string _description;
-        private int _createdById;
-        private int _invastigateById;
-        private int _closedById;
-        private int _abortedById;
-        private int _deletedById;
-        private int _settedById;
+        private string _createdById;
+        private string _invastigateById;
+        private string _closedById;
+        private string _abortedById;
+        private string _deletedById;
+        private string _settedById;
         private IncidentPriority _priority;
         private IncidentState _state;
         private List<IncidentTask> _tasks;
 
         public string Title => _title;
         public string Description => _description;
-        public int CreatedById => _createdById;
+        public string CreatedById => _createdById;
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
 
         
-        private Incident(string title, string description, int createdById)
+        private Incident(string title, string description, string createdById)
         {
             EnsureIsValid(title, "title");
             EnsureIsValid(description, "description");
@@ -37,7 +37,7 @@ namespace OpsFlow.Domain.Entities
         }
 
         // create with factory method
-        public static Incident Create(string title, string description, int createdById)
+        public static Incident Create(string title, string description, string createdById)
         {
             return new Incident(title, description, createdById);
         }
@@ -48,7 +48,7 @@ namespace OpsFlow.Domain.Entities
                 throw new ArgumentException($"-{name}- can not be empty!");
         }
 
-        public void Close(int performedById)
+        public void Close(string performedById)
         {
             if (_state == IncidentState.Aborted || _state == IncidentState.Closed)
             {
@@ -64,7 +64,7 @@ namespace OpsFlow.Domain.Entities
             _closedById = performedById;
         }
 
-        public void Investigate(int performedById)
+        public void Investigate(string performedById)
         {
             if(_state != IncidentState.Open)
             {
@@ -74,7 +74,7 @@ namespace OpsFlow.Domain.Entities
             _invastigateById = performedById;
         }
 
-        public void Abort(int performedById)
+        public void Abort(string performedById)
         {
             if (_state == IncidentState.Aborted || _state == IncidentState.Closed)
             {
@@ -84,7 +84,7 @@ namespace OpsFlow.Domain.Entities
             _abortedById = performedById;
         }
 
-        public void Delete(int performedById)
+        public void Delete(string performedById)
         {
             if (_state != IncidentState.Aborted || _state != IncidentState.Closed)
             {
@@ -95,7 +95,7 @@ namespace OpsFlow.Domain.Entities
             _deletedById = performedById;
         }
 
-        public void SetPriority(IncidentPriority toPriority, int performedById)
+        public void SetPriority(IncidentPriority toPriority, string performedById)
         {
             if (_priority == toPriority)
             {
@@ -115,13 +115,14 @@ namespace OpsFlow.Domain.Entities
             _tasks.Append(task);
         }
 
-        public IncidentTask GetTask(int taskId)
+        public IncidentTask GetTask(string taskId)
         {
             IncidentTask task = _tasks.Find(t => t.Id == taskId) ?? throw new NullReferenceException($"{taskId} is not found. Task is null!");
             return task;
         }
 
-        public void DropTask(int taskId)
+
+        public void DropTask(string taskId)
         {
             IncidentTask task = _tasks.Find(t => t.Id == taskId) ?? throw new NullReferenceException($"{taskId} is not found. Task is null!");
             _tasks.Remove(task);

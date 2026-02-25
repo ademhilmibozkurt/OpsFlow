@@ -31,26 +31,30 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
             _unitOfWork = unitOfWork;
         }
 
-        public Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
+        public async Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
         {
-            // getCurrentUser
-            User user = _currentUserService.Get();
-
             // chechPermission
-            _permissions.CanAbortIncident(user);
+            _permissions.CanAbortIncident(_currentUser.Role);
 
             // abortIncident
-            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
-            incident.Abort(user.Id);
+            Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId);
+            incident.Abort(_currentUser.UserId);
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(command.incidentId, user.Id, IncidentState.Aborted, _timeProvider.Now());
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(request.incidentId, _currentUser.UserId, IncidentState.Aborted, _timeProvider.Now(), request.abortionNote);
             await _historyRepository.AddAsync(history);
 
             // save
             _unitOfWork.Commit();
 
-            return incident.Id;
+            
+            return new AbortIncidentResponseDto
+            (
+                incident.Id,
+                request.abortionNote,
+                _currentUser.UserId,
+                _timeProvider.Now()
+            );
         }
     }
 }

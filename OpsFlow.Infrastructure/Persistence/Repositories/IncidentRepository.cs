@@ -25,7 +25,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             _context.Incidents.Update(incident);
         }
 
-        public async Task<Incident> GetByIdAsync(int incidentId)
+        public async Task<Incident> GetByIdAsync(string incidentId)
         {
             return await _context.Incidents.FindAsync(incidentId);
         }

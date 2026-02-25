@@ -3,5 +3,5 @@ using OpsFlow.Application.Incidents.Dtos;
 
 namespace OpsFlow.Application.Incidents.Commands.AbortIncident
 {
-    public record AbortIncidentCommand(int incidentId) : IRequest<AbortIncidentResponseDto>;
+    public record AbortIncidentCommand(string incidentId, string abortionNote) : IRequest<AbortIncidentResponseDto>;
 }

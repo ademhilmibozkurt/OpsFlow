@@ -4,24 +4,24 @@ namespace OpsFlow.Domain.Entities
 {
     public class IncidentTask : BaseEntity
     {
-        private int _incidentId;
+        private string _incidentId;
         private string _title;
         private string _note = "";
         private IncidentTaskState _taskState;
-        private int _assignedId;
-        private int _startedById;
-        private int _finishedById;
-        private int _abortedById;
-        private int _deletedById;
+        private string _assignedId;
+        private string _startedById;
+        private string _finishedById;
+        private string _abortedById;
+        private string _deletedById;
 
         // properties can read-only outside the class
-        public int IncidentId => _incidentId;
+        public string IncidentId => _incidentId;
         public string Title => _title;
         public string Note => _note;
         public IncidentTaskState TaskState => _taskState;
-        public int AssignedId => _assignedId;
+        public string AssignedId => _assignedId;
 
-        private IncidentTask(int incidentId, string title, string note = "")
+        private IncidentTask(string incidentId, string title, string note = "")
         {
             EnsureTitleIsValid(title);
             
@@ -31,7 +31,7 @@ namespace OpsFlow.Domain.Entities
             _taskState = IncidentTaskState.Created;
         }
 
-        public static IncidentTask Create(int incidentId, string title, string note = "")
+        public static IncidentTask Create(string incidentId, string title, string note = "")
         {
             return new IncidentTask(incidentId, title, note);
         }
@@ -42,7 +42,7 @@ namespace OpsFlow.Domain.Entities
                 throw new ArgumentException("Task title can not be empty", nameof(title));
         }
 
-        public void Assign(int assignedId)
+        public void Assign(string assignedId)
         {   
             ChangeState(
                 IncidentTaskState.Created,
@@ -52,7 +52,7 @@ namespace OpsFlow.Domain.Entities
             _assignedId = assignedId;
         }
 
-        public void Start(int performedById)
+        public void Start(string performedById)
         {
             ChangeState(
                 IncidentTaskState.Assigned,
@@ -62,7 +62,7 @@ namespace OpsFlow.Domain.Entities
             _startedById = performedById;
         }
 
-        public void Close(int performedById)
+        public void Close(string performedById)
         {
             ChangeState(
                 IncidentTaskState.InProgress,
@@ -72,7 +72,7 @@ namespace OpsFlow.Domain.Entities
             _finishedById = performedById;
         }
 
-        public void Abort(int performedById)
+        public void Abort(string performedById)
         {
             if (_taskState != IncidentTaskState.Assigned && _taskState != IncidentTaskState.InProgress)
             {
@@ -87,7 +87,7 @@ namespace OpsFlow.Domain.Entities
             _abortedById = performedById;
         }
 
-        public void Delete(int performedById)
+        public void Delete(string performedById)
         {
             if (_taskState != IncidentTaskState.Done && _taskState != IncidentTaskState.Aborted)
             {

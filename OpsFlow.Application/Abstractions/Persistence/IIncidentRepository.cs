@@ -6,7 +6,7 @@ namespace OpsFlow.Application.Abstractions.Persistence
     {
         Task AddAsync(Incident incident);
         Task UpdateAsync(Incident incident);
-        Task<Incident> GetByIdAsync(int incidentId);
+        Task<Incident> GetByIdAsync(string incidentId);
         Task<List<Incident>> GetAllAsync();
         Task DeleteAsync(Incident incident);
     }
