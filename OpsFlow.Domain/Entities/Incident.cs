@@ -1,4 +1,5 @@
 using System.Data;
+using System.Runtime.CompilerServices;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Domain.Entities

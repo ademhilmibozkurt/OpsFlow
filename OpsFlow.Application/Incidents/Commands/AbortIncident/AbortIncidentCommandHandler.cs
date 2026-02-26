@@ -40,7 +40,9 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
                 _currentUser.Role ??
                 throw new NotFoundException("User role not found!"));
 
-            // abortIncident - !! check is null or not !!
+            // validateParameters
+
+            // abortIncident
             Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId, cancellationToken);
 
             incident.Abort(

@@ -3,5 +3,5 @@ using OpsFlow.Application.Incidents.Dtos;
 
 namespace OpsFlow.Application.Incidents.Commands.InvestigateIncident
 {
-    public record InvestigateIncidentCommand(int incidentId) : IRequest<InvestigateIncidentResponseDto>;
+    public record InvestigateIncidentCommand(string incidentId) : IRequest<InvestigateIncidentResponseDto>;
 }

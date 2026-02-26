@@ -1,6 +1,7 @@
 using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
@@ -11,7 +12,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,43 +21,60 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         public CreateIncidentCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
-            ICurrentUserService currentUserService,
+            ICurrentUserService currentUser,
             IPermissionService permissionService,
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
             _permissionService = permissionService;
             _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
 
-        public Task<CreateIncidentResponseDto> Handle(CreateIncidentCommand request, CancellationToken cancellationToken)
+        public async Task<CreateIncidentResponseDto> Handle(CreateIncidentCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
-            var user = _currentUserService.Get();
-
-            // checkUserRole
-            // string userRole = _userRepository.GetByIdAsync(user.Id);
+            string userId = _currentUser.UserId ?? throw new NotFoundException("User id not found!");
+            string userRole = _currentUser.Role ?? throw new NotFoundException("User role not found!");
 
             // checkPermission
-            _permissionService.CanCreateIncident();
+            _permissionService.CanCreateIncident(userRole);
 
             // createIncident
-            Incident incident =  Incident.Create(command.title, command.description, user.Id);
-            incident.CreatedAt = _timeProvider.Now();
-            await _incidentRepository.AddAsync(incident);
+            Incident incident =  Incident.Create(
+                request.title,
+                request.description,
+                userId
+            );
+
+            DateTime createdAt = _timeProvider.Now();
+            incident.CreatedAt = createdAt;
+
+            await _incidentRepository.AddAsync(incident, cancellationToken);
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, user.Id, IncidentState.Open, _timeProvider.Now());
-            await _historyRepository.AddAsync(history);
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(
+                incident.Id,
+                userId,
+                IncidentState.Open,
+                createdAt);
+            
+            await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
 
-            return incident.Id;
+            return new CreateIncidentResponseDto
+            (
+                incident.Id,
+                request.title,
+                request.description,
+                userId,
+                createdAt
+            );
         }
     }
 }
