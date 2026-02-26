@@ -36,7 +36,7 @@ namespace OpsFlow.Application.Users.Commands.Register
             // validateParameters
 
             // registerUser
-            var user = await _userService.CreateUserAsync(
+            AppUser user = await _userService.CreateUserAsync(
                 request.fullName,
                 request.userName,
                 request.email,

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OpsFlow.Application.Identity;
 using OpsFlow.Domain.Entities;
-using OpsFlow.Infrastructure.Identity;
 
 namespace OpsFlow.Infrastructure.Persistence.AppContext
 {

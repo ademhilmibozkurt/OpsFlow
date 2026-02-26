@@ -1,6 +1,8 @@
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
@@ -33,22 +35,33 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
 
         public async Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
         {
-            // chechPermission - !! check current user is null or not !!
-            _permissions.CanAbortIncident(_currentUser.Role);
+            // chechPermission
+            _permissions.CanAbortIncident(
+                _currentUser.Role ??
+                throw new NotFoundException("User role not found!"));
 
             // abortIncident - !! check is null or not !!
             Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId);
-            incident.Abort(_currentUser.UserId);
+            
+            incident.Abort(
+                _currentUser.UserId ??
+                throw new NotFoundException("User id not found!"));
 
             // createTimestamp
             DateTime abortedAt = _timeProvider.Now();
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddIncidentHistory(request.incidentId, _currentUser.UserId, IncidentState.Aborted, abortedAt, request.abortionNote);
+            IncidentHistory history = IncidentHistory.AddIncidentHistory(
+                request.incidentId, 
+                _currentUser.UserId, 
+                IncidentState.Aborted, 
+                abortedAt,
+                request.abortionNote);
+
             await _historyRepository.AddAsync(history);
 
             // save
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
 
             
             return new AbortIncidentResponseDto
