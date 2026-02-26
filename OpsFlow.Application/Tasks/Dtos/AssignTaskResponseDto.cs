@@ -5,7 +5,7 @@ namespace OpsFlow.Application.Tasks.Dtos
         string TaskId,
         string Title,
         string AssignedById,
-        string AssignedToId,
+        string AssigneeId,
         DateTime OccuredAt
     );
 }

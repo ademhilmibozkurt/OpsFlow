@@ -46,6 +46,7 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
             Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId, cancellationToken);
 
             incident.Abort(
+                request.abortionNote,
                 _currentUser.UserId ??
                 throw new NotFoundException("User id not found!"));
 

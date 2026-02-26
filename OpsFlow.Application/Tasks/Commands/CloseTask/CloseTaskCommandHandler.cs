@@ -1,6 +1,7 @@
 using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Tasks.Dtos;
 using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
@@ -11,7 +12,7 @@ namespace OpsFlow.Application.Tasks.Commands.CloseTask
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly IIncidentHistoryRepository _historyRepository;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
         private readonly IDateTimeProvider _timeProvider;
         private readonly IUnitOfWork _unitOfWork;
@@ -19,42 +20,54 @@ namespace OpsFlow.Application.Tasks.Commands.CloseTask
         public CloseTaskCommandHandler(
             IIncidentRepository incidentRepository,
             IIncidentHistoryRepository historyRepository,
-            ICurrentUserService currentUserService,
+            ICurrentUserService currentUser,
             IPermissionService permissionService,
             IDateTimeProvider timeProvider,
             IUnitOfWork unitOfWork)
         {
             _incidentRepository = incidentRepository;
             _historyRepository = historyRepository;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
             _permissionService = permissionService;
             _timeProvider = timeProvider;
             _unitOfWork = unitOfWork;
         }
     
-        public Task<CloseTaskResponseDto> Handle(CloseTaskCommand request, CancellationToken cancellationToken)
+        public async Task<CloseTaskResponseDto> Handle(CloseTaskCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
-            User user = _currentUserService.Get();
+            string userId = _currentUser.UserId ?? throw new NotFoundException("User id not found!");
+            string userRole = _currentUser.Role ?? throw new NotFoundException("User role not found!");
             
             // findTask
-            Incident incident = await _incidentRepository.GetByIdAsync(command.incidentId);
-            IncidentTask task = incident.GetTask(command.taskId);
+            Incident incident = await _incidentRepository.GetByIdAsync(
+                request.incidentId,
+                cancellationToken)
+                ?? throw new NotFoundException("Incident not found!");
+
+            IncidentTask task = incident.GetTask(request.taskId);
 
             // checkPermission
-            _permissionService.CanCloseTask(user, task.AssignedId);
+            _permissionService.CanCloseTask(userRole, task.AssigneeId);
 
             // finishTask
-            task.Close(user.Id);
+            task.Close(userId);
+            DateTime closedAt = _timeProvider.Now();
 
             // addHistory
-            IncidentHistory history = IncidentHistory.AddTaskHistory(incident.Id, user.Id, IncidentTaskState.Done, _timeProvider.Now(), task.Id);
-            await _historyRepository.AddAsync(history);
+            IncidentHistory history = IncidentHistory.AddTaskHistory(incident.Id, userId, IncidentTaskState.Done, closedAt, task.Id);
+            await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.Commit();
+            _unitOfWork.CommitAsync();
 
-            return task.Id;
+            return new CloseTaskResponseDto
+            (
+                task.Id,
+                task.Title,
+                userId,
+                closedAt
+            );
         }
     }
 }

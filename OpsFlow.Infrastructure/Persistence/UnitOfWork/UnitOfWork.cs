@@ -10,7 +10,7 @@ namespace OpsFlow.Infrastructure.Persistence.UnitOfWork
         {
             _context = context;
         }
-        public void Commit()
+        public void CommitAsync()
         {
             _context.SaveChanges();
         }

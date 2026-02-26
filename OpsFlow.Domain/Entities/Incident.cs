@@ -8,6 +8,7 @@ namespace OpsFlow.Domain.Entities
     {
         private string _title;
         private string _description;
+        private string? _abortionNote = "";
         private string _createdById;
         private string _invastigateById;
         private string _closedById;
@@ -20,6 +21,7 @@ namespace OpsFlow.Domain.Entities
 
         public string Title => _title;
         public string Description => _description;
+        public string? AbortionNote => _abortionNote;
         public string CreatedById => _createdById;
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
@@ -75,7 +77,7 @@ namespace OpsFlow.Domain.Entities
             _invastigateById = performedById;
         }
 
-        public void Abort(string performedById)
+        public void Abort(string abortionNote, string performedById)
         {
             if (_state == IncidentState.Aborted || _state == IncidentState.Closed)
             {
@@ -83,6 +85,7 @@ namespace OpsFlow.Domain.Entities
             }
             _state = IncidentState.Aborted;
             _abortedById = performedById;
+            _abortionNote = abortionNote;
         }
 
         public void Delete(string performedById)

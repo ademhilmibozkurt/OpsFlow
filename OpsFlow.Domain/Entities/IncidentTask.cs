@@ -7,8 +7,10 @@ namespace OpsFlow.Domain.Entities
         private string _incidentId;
         private string _title;
         private string _note = "";
+        private string? _abortionNote = "";
         private IncidentTaskState _taskState;
-        private string _assignedId;
+        private string _assigneeId;
+        private string _assignedById;
         private string _startedById;
         private string _finishedById;
         private string _abortedById;
@@ -18,8 +20,9 @@ namespace OpsFlow.Domain.Entities
         public string IncidentId => _incidentId;
         public string Title => _title;
         public string Note => _note;
+        public string AbortionNote => _abortionNote;
         public IncidentTaskState TaskState => _taskState;
-        public string AssignedId => _assignedId;
+        public string AssigneeId => _assigneeId;
 
         private IncidentTask(string incidentId, string title, string note = "")
         {
@@ -42,14 +45,15 @@ namespace OpsFlow.Domain.Entities
                 throw new ArgumentException("Task title can not be empty", nameof(title));
         }
 
-        public void Assign(string assignedId)
+        public void Assign(string assigneeId, string performedById)
         {   
             ChangeState(
                 IncidentTaskState.Created,
                 IncidentTaskState.Assigned,
                 $"Task state is {_taskState}. Task can not assign!"
             );
-            _assignedId = assignedId;
+            _assigneeId = assigneeId;
+            _assignedById = performedById;
         }
 
         public void Start(string performedById)
@@ -72,7 +76,7 @@ namespace OpsFlow.Domain.Entities
             _finishedById = performedById;
         }
 
-        public void Abort(string performedById)
+        public void Abort(string abortionNote, string performedById)
         {
             if (_taskState != IncidentTaskState.Assigned && _taskState != IncidentTaskState.InProgress)
             {
@@ -85,6 +89,7 @@ namespace OpsFlow.Domain.Entities
                 $"Task state is {_taskState}. Abortion can not done!"
             );
             _abortedById = performedById;
+            _abortionNote = abortionNote;
         }
 
         public void Delete(string performedById)
