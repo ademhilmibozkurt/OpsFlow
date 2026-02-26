@@ -41,8 +41,8 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
                 throw new NotFoundException("User role not found!"));
 
             // abortIncident - !! check is null or not !!
-            Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId);
-            
+            Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId, cancellationToken);
+
             incident.Abort(
                 _currentUser.UserId ??
                 throw new NotFoundException("User id not found!"));
@@ -58,7 +58,7 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
                 abortedAt,
                 request.abortionNote);
 
-            await _historyRepository.AddAsync(history);
+            await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
             _unitOfWork.CommitAsync();

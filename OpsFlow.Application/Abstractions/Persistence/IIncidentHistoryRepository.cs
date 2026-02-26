@@ -4,6 +4,6 @@ namespace OpsFlow.Application.Abstractions.Persistence
 {
     public interface IIncidentHistoryRepository
     {
-        Task AddAsync(IncidentHistory history);
+        Task AddAsync(IncidentHistory history, CancellationToken cancellationToken);
     }
 }

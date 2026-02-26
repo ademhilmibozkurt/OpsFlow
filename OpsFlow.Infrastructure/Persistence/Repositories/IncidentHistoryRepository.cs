@@ -13,7 +13,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             _context = context;   
         }
 
-        public async Task AddAsync(IncidentHistory history)
+        public async Task AddAsync(IncidentHistory history, CancellationToken cancellationToken)
         {
             await _context.Histories.AddAsync(history);
         }

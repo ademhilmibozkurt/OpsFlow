@@ -39,7 +39,9 @@ namespace OpsFlow.Infrastructure.Services
             await _userManager.AddToRoleAsync(user, AppRole.User);
 
             // returnUser
-            return await _userManager.FindByEmailAsync(user.Email);
+            return await _userManager.FindByEmailAsync(
+                user.Email ?? 
+                throw new NotFoundException("User not found!"));
         }
         
         public async Task<AppUser?> FindByEmailAsync(string email)
