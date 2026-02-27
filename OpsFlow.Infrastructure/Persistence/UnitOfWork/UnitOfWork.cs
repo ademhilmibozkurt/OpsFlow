@@ -10,9 +10,9 @@ namespace OpsFlow.Infrastructure.Persistence.UnitOfWork
         {
             _context = context;
         }
-        public void CommitAsync()
+        public void CommitAsync(CancellationToken cancellationToken)
         {
-            _context.SaveChanges();
+            _context.SaveChangesAsync(cancellationToken);
         }
 
         public void Dispose()

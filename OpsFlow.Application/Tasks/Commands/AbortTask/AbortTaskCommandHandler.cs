@@ -59,7 +59,7 @@ namespace OpsFlow.Application.Tasks.Commands.AbortTask
             await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
 
             return new AbortTaskResponseDto
             (

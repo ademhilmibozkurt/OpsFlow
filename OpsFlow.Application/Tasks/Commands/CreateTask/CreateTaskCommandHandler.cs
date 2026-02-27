@@ -61,7 +61,7 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
 
             return new CreateTaskResponseDto
             (

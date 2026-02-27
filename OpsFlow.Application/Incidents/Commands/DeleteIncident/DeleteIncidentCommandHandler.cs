@@ -54,7 +54,7 @@ namespace OpsFlow.Application.Incidents.Commands.DeleteIncident
             IncidentHistory history = IncidentHistory.AddIncidentHistory(incident.Id, userId, IncidentState.Deleted, deletedAt);
             await _historyRepository.AddAsync(history, cancellationToken);
 
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
 
             return new DeleteIncidentResponseDto
             (

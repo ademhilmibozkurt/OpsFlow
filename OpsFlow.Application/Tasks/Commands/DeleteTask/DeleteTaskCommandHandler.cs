@@ -60,7 +60,7 @@ namespace OpsFlow.Application.Tasks.Commands.DeleteTask
             await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
             
             return new DeleteTaskResponseDto
             (

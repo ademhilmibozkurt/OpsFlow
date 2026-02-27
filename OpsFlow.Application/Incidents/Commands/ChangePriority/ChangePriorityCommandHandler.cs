@@ -57,7 +57,7 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
             await _historyRepository.AddAsync(history, cancellationToken);
 
             // save UoW's job
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
 
             return new ChangePriorityResponseDto
             (

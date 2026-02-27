@@ -61,7 +61,7 @@ namespace OpsFlow.Application.Incidents.Commands.InvestigateIncident
             await _historyRepository.AddAsync(history, cancellationToken);
 
             // save
-            _unitOfWork.CommitAsync();
+            _unitOfWork.CommitAsync(cancellationToken);
 
             return new InvestigateIncidentResponseDto
             (
