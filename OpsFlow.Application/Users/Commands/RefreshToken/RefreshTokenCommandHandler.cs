@@ -1,18 +1,60 @@
 using MediatR;
+using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
+using OpsFlow.Application.Identity;
+using OpsFlow.Application.Models;
 using OpsFlow.Application.Users.Dtos;
 
 namespace OpsFlow.Application.Users.Commands.RefreshToken
 {
-    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand>
+    public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, AuthTokenResponseDto>
     {
-        public RefreshTokenCommandHandler(Parameters)
+        private readonly IUserService _userService;
+        private readonly IDateTimeProvider _timeProvider;
+        private readonly ITokenService _tokenService;
+        private readonly ITokenRepository _tokenRepository;
+        public RefreshTokenCommandHandler(
+            IUserService userService,
+            IDateTimeProvider timeProvider,
+            ITokenService tokenService,
+            ITokenRepository tokenRepository)
         {
-            
+            _userService = userService;
+            _timeProvider = timeProvider;
+            _tokenService = tokenService;
+            _tokenRepository = tokenRepository; 
         }
 
-        Task IRequestHandler<RefreshTokenCommand>.Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        public async Task<AuthTokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            return Handle(request, cancellationToken);
+            // getRefreshToken
+            string existingToken = await _tokenRepository.GetByTokenAsync(
+                request.refreshToken)
+                ?? throw new NotFoundException("Refresh token not found!");
+
+            // checkRefreshToken - is revoked or expired
+            if(existingToken.IsRevoked || existingToken.ExpiresAt < _timeProvider.Now())
+                throw new InvalidRefreshTokenException();
+
+            // makeRevoked
+            existingToken.IsRevoked = true;
+
+            // findUser
+            AppUser user = await _userService.FindByIdAsync(existingToken.userId) ?? throw new NotFoundException("User not found!");
+
+            // generateNewTokens
+            TokenResultModel token = _tokenService.GenerateTokens(user);
+
+            // addTokens
+            await _tokenRepository.AddAsync(token.RefreshToken, user.Id, _timeProvider.Now().AddDays(30));
+
+            // returnDto
+            return new AuthTokenResponseDto
+            (
+                token.AccessToken,
+                token.RefreshToken,
+                token.ExpiresAt
+            );
         }
     }
 }

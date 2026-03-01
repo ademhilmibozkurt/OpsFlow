@@ -43,6 +43,9 @@ namespace OpsFlow.Infrastructure.Services
                 user.Email ?? 
                 throw new NotFoundException("User not found!"));
         }
+
+        public async Task<AppUser?> FindByIdAsync(string userId)
+            => await _userManager.FindByIdAsync(userId);
         
         public async Task<AppUser?> FindByEmailAsync(string email)
             => await _userManager.FindByEmailAsync(email);

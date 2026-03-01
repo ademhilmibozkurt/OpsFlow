@@ -1,10 +1,7 @@
 namespace OpsFlow.Application.Users.Dtos
 {
-    public sealed record LoginResponseDto
+    public sealed record AuthTokenResponseDto
     (
-        Guid UserId,
-        string FullName,
-        string UserName,
         string AccessToken,
         string RefreshToken,
         DateTime ExpiresAt

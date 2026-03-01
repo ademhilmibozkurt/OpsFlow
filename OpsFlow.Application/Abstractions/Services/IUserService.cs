@@ -12,6 +12,7 @@ namespace OpsFlow.Application.Abstractions.Services
             string phoneNumber,
             string password
         );
+        Task<AppUser?> FindByIdAsync(string userId);
         Task<AppUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(AppUser user, string password);
         Task<IList<string>> GetRoleAsync(AppUser user);
