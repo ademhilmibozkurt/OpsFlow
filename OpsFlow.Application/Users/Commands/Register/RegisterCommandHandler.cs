@@ -56,7 +56,6 @@ namespace OpsFlow.Application.Users.Commands.Register
             // returnResponseDto
             return new RegisterResponseDto
             {
-                UserId = user.Id,
                 FullName = user.FullName,
                 UserName = user.UserName,
                 Email = user.Email,

@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // repositories DI
 builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 builder.Services.AddScoped<IIncidentHistoryRepository, IncidentHistoryRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // unitOfWork DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -25,15 +26,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // currentUserService DI
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
-// dateTimeProvider DI
+// services DI
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-
-// permissionService DI
 builder.Services.AddScoped<IPermissionService, PermissionService>();
-
-// userService DI
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // add Identity
 builder.Services.AddIdentity<AppUser, AppRole>(options =>

@@ -1,4 +1,5 @@
 using MediatR;
+using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
@@ -28,8 +29,9 @@ namespace OpsFlow.Application.Users.Commands.RefreshToken
         public async Task<AuthTokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
             // getRefreshToken
-            string existingToken = await _tokenRepository.GetByTokenAsync(
-                request.refreshToken)
+            RefreshTokenModel existingToken = await _tokenRepository.GetByTokenAsync(
+                request.refreshToken,
+                cancellationToken)
                 ?? throw new NotFoundException("Refresh token not found!");
 
             // checkRefreshToken - is revoked or expired
@@ -37,16 +39,18 @@ namespace OpsFlow.Application.Users.Commands.RefreshToken
                 throw new InvalidRefreshTokenException();
 
             // makeRevoked
-            existingToken.IsRevoked = true;
+            await _tokenRepository.RevokeAsync(existingToken.Token, cancellationToken);
 
             // findUser
-            AppUser user = await _userService.FindByIdAsync(existingToken.userId) ?? throw new NotFoundException("User not found!");
+            AppUser user = await _userService.FindByIdAsync(
+                existingToken.UserId)
+                ?? throw new NotFoundException("User not found!");
 
             // generateNewTokens
             TokenResultModel token = _tokenService.GenerateTokens(user);
 
             // addTokens
-            await _tokenRepository.AddAsync(token.RefreshToken, user.Id, _timeProvider.Now().AddDays(30));
+            await _tokenRepository.AddAsync(token.RefreshToken, user.Id, _timeProvider.Now().AddDays(30), cancellationToken);
 
             // returnDto
             return new AuthTokenResponseDto

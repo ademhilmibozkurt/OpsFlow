@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Identity;
 using OpsFlow.Domain.Entities;
+using OpsFlow.Infrastructure.Entities;
 
 namespace OpsFlow.Infrastructure.Persistence.AppContext
 {
@@ -20,5 +21,6 @@ namespace OpsFlow.Infrastructure.Persistence.AppContext
         public DbSet<Incident> Incidents {get; set;}
         public DbSet<IncidentTask> Tasks {get; set;}
         public DbSet<IncidentHistory> Histories {get; set;}
+        public DbSet<RefreshToken> Tokens {get; set;}
     }
 }
