@@ -4,7 +4,6 @@ namespace OpsFlow.Application.Users.Dtos
 {
     public sealed record GetUserDetailResponseDto
     (
-        Guid UserId,
         string FullName,
         string UserName,
         string Email,

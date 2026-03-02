@@ -150,5 +150,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{userRole} can not update profile!");
             }
         }
+
+        public void CanChangeUserName(string currentUserId, string userId)
+        {
+            if (currentUserId != userId)
+            {
+                throw new ForbiddenException("Only account owner change user name!");
+            }
+        }
     }
 }
