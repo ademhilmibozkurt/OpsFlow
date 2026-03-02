@@ -1,9 +1,9 @@
 namespace OpsFlow.Application.Users.Dtos
 {
-    public sealed record ChangeUserNameResponseDto
+    public sealed record ChangeEmailResponseDto
     (
         string FullName,
-        string UserName,
+        string Email,
         DateTime ChangedAt
     );
 }
