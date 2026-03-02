@@ -1,30 +1,30 @@
 using MediatR;
+using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Models;
 
 namespace OpsFlow.Application.Users.Commands.Logout
 {
     public class LogoutCommandHandler : IRequestHandler<LogoutCommand>
     {
-        private readonly IUserService _userService;
-        private readonly IDateTimeProvider _timeProvider;
-        private readonly ITokenService _tokenService;
-        public LogoutCommandHandler(
-            IUserService userService,
-            IDateTimeProvider timeProvider,
-            ITokenService tokenService)
+        private readonly ITokenRepository _tokenRepository;
+        public LogoutCommandHandler(ITokenRepository tokenRepository)
         {
-            _userService = userService;
-            _timeProvider = timeProvider;
-            _tokenService = tokenService;
+            _tokenRepository = tokenRepository;
         }
 
-        public Task Handle(LogoutCommand request, CancellationToken cancellationToken)
+        public async Task Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
+            RefreshTokenModel token = await _tokenRepository.GetByTokenAsync(
+                request.refreshToken,
+                cancellationToken);
 
             // logout
-
-            
+            if (token != null)
+                await _tokenRepository.RevokeAsync(
+                    token.Token,
+                    cancellationToken);
         }
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
@@ -10,13 +11,19 @@ namespace OpsFlow.Application.Users.Commands.Login
     public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthTokenResponseDto>
     {
         private readonly IUserService _userService;
+        private readonly IDateTimeProvider _timeProvider;
         private readonly ITokenService _tokenService;
+        private readonly ITokenRepository _tokenRepository;
         public LoginCommandHandler(
             IUserService userService,
-            ITokenService tokenService)
+            IDateTimeProvider timeProvider,
+            ITokenService tokenService,
+            ITokenRepository tokenRepository)
         {
             _userService = userService;
+            _timeProvider = timeProvider;
             _tokenService = tokenService;
+            _tokenRepository = tokenRepository;
         }
         public async Task<AuthTokenResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
@@ -33,6 +40,12 @@ namespace OpsFlow.Application.Users.Commands.Login
 
             // generateToken
             TokenResultModel token = _tokenService.GenerateTokens(user);
+
+            await _tokenRepository.AddAsync(
+                token.RefreshToken,
+                user.Id,
+                _timeProvider.Now().AddDays(30),
+                cancellationToken);
 
             return new AuthTokenResponseDto
             (
