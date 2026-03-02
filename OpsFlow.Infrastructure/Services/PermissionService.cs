@@ -137,5 +137,18 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException("Only account owner can change password!");
             }
         }
+
+        public void CanUpdateProfile(string currentUserId, string userId, string userRole)
+        {
+            if (userId == currentUserId)
+            {
+                return ;
+            }
+
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException($"{userRole} can not update profile!");
+            }
+        }
     }
 }

@@ -24,5 +24,6 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanDeleteUser(string userId, string currentUserId, string userRole);
         void CanChangeRole(string userRole);
         void CanChangePassword(string currentUserId, string userId);
+        void CanUpdateProfile(string currentUserId, string userId, string Role);
     }
 }
