@@ -35,11 +35,8 @@ namespace OpsFlow.Application.Users.Commands.DeleteUser
             // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("Current user not found!");
 
-            // getUserRole
-            string userRole = await _userService.GetRoleAsync(user);
-
             // checkPermission
-            _permissionService.CanDeleteUser(request.userId, userId, userRole);
+            _permissionService.CanDeleteUser(request.userId, userId, user.Role.ToString());
             
             // deleteUser
             await _userService.Delete(user);

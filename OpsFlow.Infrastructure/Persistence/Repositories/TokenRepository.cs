@@ -50,15 +50,19 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             
             if (model != null)
                 model.IsRevoked = true;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task RevokeAllAsync(string userId, CancellationToken cancellationToken)
         {
-            List<RefreshToken> models = _context.Tokens.Where(x => x.UserId == userId).ToList();
+            List<RefreshToken> models = _context.Tokens.Where(x => x.UserId == userId && !x.IsRevoked).ToList();
             foreach(RefreshToken model in models)
             {
                 model.IsRevoked = true;
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -121,5 +121,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException("User can not delete user!");
             }
         }
+
+        public void CanChangeRole(string userRole)
+        {
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException($"{userRole} can not change role!");
+            }
+        }
     }
 }
