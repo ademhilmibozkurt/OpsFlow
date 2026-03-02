@@ -7,5 +7,6 @@ namespace OpsFlow.Application.Abstractions.Persistence
         Task AddAsync(string refreshToken, string userId, DateTime expiresAt, CancellationToken cancellationToken);
         Task<RefreshTokenModel> GetByTokenAsync(string refreshToken, CancellationToken cancellationToken);
         Task RevokeAsync(string refreshToken, CancellationToken cancellationToken);
+        Task RevokeAllAsync(string userId, CancellationToken cancellationToken);
     }
 }

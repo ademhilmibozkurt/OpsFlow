@@ -15,6 +15,7 @@ namespace OpsFlow.Application.Abstractions.Services
         Task<AppUser?> FindByIdAsync(string userId);
         Task<AppUser?> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(AppUser user, string password);
-        Task<IList<string>> GetRoleAsync(AppUser user);
+        Task<string> GetRoleAsync(AppUser user);
+        Task Delete(AppUser user);
     }
 }

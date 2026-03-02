@@ -107,5 +107,19 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        
+        // Users
+        public void CanDeleteUser(string userId, string currentUserId, string userRole)
+        {
+            if (userId == currentUserId)
+            {
+                return ;
+            }
+
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException("User can not delete user!");
+            }
+        }
     }
 }

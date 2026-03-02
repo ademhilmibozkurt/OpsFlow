@@ -53,7 +53,20 @@ namespace OpsFlow.Infrastructure.Services
         public async Task<bool> CheckPasswordAsync(AppUser user, string password)
             => await _userManager.CheckPasswordAsync(user, password);
 
-        public async Task<IList<string>> GetRoleAsync(AppUser user)
-            => await _userManager.GetRolesAsync(user);
+        public async Task<string> GetRoleAsync(AppUser user)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Count == 0)
+                throw new Exception("User has no role");
+
+            if (roles.Count > 1)
+                throw new Exception("User has multiple roles but system expects one");
+
+            return roles[0];
+        }
+
+        public async Task Delete(AppUser user)
+            => await _userManager.DeleteAsync(user);
     }
 }

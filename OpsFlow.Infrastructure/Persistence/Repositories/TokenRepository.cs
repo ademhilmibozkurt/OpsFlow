@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Models;
@@ -51,6 +50,15 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             
             if (model != null)
                 model.IsRevoked = true;
+        }
+
+        public async Task RevokeAllAsync(string userId, CancellationToken cancellationToken)
+        {
+            List<RefreshToken> models = _context.Tokens.Where(x => x.UserId == userId).ToList();
+            foreach(RefreshToken model in models)
+            {
+                model.IsRevoked = true;
+            }
         }
     }
 }
