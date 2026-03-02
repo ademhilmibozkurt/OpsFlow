@@ -53,6 +53,9 @@ namespace OpsFlow.Infrastructure.Services
         public async Task<bool> CheckPasswordAsync(AppUser user, string password)
             => await _userManager.CheckPasswordAsync(user, password);
 
+        public async Task ChangePasswordAsync(AppUser user, string currentPassword, string newPassword)
+            => await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
         public async Task UpdateAsync(AppUser user)
             => await _userManager.UpdateAsync(user);
 

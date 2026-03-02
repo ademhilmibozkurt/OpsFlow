@@ -55,14 +55,14 @@ namespace OpsFlow.Application.Users.Commands.Register
 
             // returnResponseDto
             return new RegisterResponseDto
-            {
-                FullName = user.FullName,
-                UserName = user.UserName,
-                Email = user.Email,
-                AccessToken = token.AccessToken,
-                RefreshToken = token.RefreshToken,
-                ExpiresAt = token.ExpiresAt
-            };
+            (
+                user.FullName,
+                user.UserName,
+                user.Email,
+                token.AccessToken,
+                token.RefreshToken,
+                token.ExpiresAt
+            );
         }
     }
 }

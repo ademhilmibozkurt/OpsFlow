@@ -129,5 +129,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{userRole} can not change role!");
             }
         }
+
+        public void CanChangePassword(string currentUserId, string userId)
+        {
+            if(currentUserId != userId)
+            {
+                throw new ForbiddenException("Only account owner can change password!");
+            }
+        }
     }
 }
