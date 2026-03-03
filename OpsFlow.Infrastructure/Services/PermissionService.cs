@@ -57,6 +57,18 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        public void CanGetIncidentDetail(string createdById, string userId, string userRole)
+        {
+            if (createdById == userId)
+            {
+                return;
+            }
+            else if (userRole == "User")
+            {
+                throw new ForbiddenException($"{userRole} can not get incident detail!");
+            }
+        }
+
 
         // tasks
         public void CanCreateTask(string userRole)

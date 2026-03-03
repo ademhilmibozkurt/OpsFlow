@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using OpsFlow.Application.Abstractions.Persistence;
@@ -35,20 +36,22 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
 
         public async Task<AbortIncidentResponseDto> Handle(AbortIncidentCommand request, CancellationToken cancellationToken)
         {
+            // getCurrentUser
+            string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
+            string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
+
             // chechPermission
-            _permissions.CanAbortIncident(
-                _currentUser.Role ??
-                throw new NotFoundException("User role not found!"));
+            _permissions.CanAbortIncident(userRole);
 
             // validateParameters
 
             // abortIncident
-            Incident incident = await _incidentRepository.GetByIdAsync(request.incidentId, cancellationToken);
+            Incident incident = await _incidentRepository.GetByIdAsync(
+                request.incidentId,
+                cancellationToken)
+                ?? throw new NotFoundException("Incident not found!");
 
-            incident.Abort(
-                request.abortionNote,
-                _currentUser.UserId ??
-                throw new NotFoundException("User id not found!"));
+            incident.Abort(request.abortionNote, userId);
 
             // createTimestamp
             DateTime abortedAt = _timeProvider.Now();

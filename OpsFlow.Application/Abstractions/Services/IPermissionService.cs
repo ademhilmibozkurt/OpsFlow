@@ -11,6 +11,7 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanAbortIncident(string userRole);
         void CanInvestigateIncident(string userRole);
         void CanDeleteIncident(string userRole);
+        void CanGetIncidentDetail(string createdById, string userId, string userRole);
     
         // tasks
         void CanCreateTask(string userRole);

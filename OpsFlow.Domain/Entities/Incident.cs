@@ -142,5 +142,17 @@ namespace OpsFlow.Domain.Entities
                 }
             }
         }
+
+        public bool IsAllTasksDone()
+        {
+            foreach(IncidentTask task in _tasks)
+            {
+                if (task.TaskState != IncidentTaskState.Done)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
