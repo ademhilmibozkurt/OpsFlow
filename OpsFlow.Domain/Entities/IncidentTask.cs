@@ -9,6 +9,7 @@ namespace OpsFlow.Domain.Entities
         private string _note = "";
         private string? _abortionNote = "";
         private IncidentTaskState _taskState;
+        private string _createdById;
         private string _assigneeId;
         private string _assignedById;
         private string _startedById;
@@ -23,18 +24,20 @@ namespace OpsFlow.Domain.Entities
         public string AbortionNote => _abortionNote;
         public IncidentTaskState TaskState => _taskState;
         public string AssigneeId => _assigneeId;
+        public string CreatedById => _createdById;
 
-        private IncidentTask(string incidentId, string title, string note = "")
+        private IncidentTask(string incidentId, string title, string createdById, string note = "")
         {
             EnsureTitleIsValid(title);
             
             _title = title;
             _note  = note;
             _incidentId = incidentId;
+            _createdById = createdById;
             _taskState = IncidentTaskState.Created;
         }
 
-        public static IncidentTask Create(string incidentId, string title, string note = "")
+        public static IncidentTask Create(string incidentId, string title, string createdById, string note = "")
         {
             return new IncidentTask(incidentId, title, note);
         }

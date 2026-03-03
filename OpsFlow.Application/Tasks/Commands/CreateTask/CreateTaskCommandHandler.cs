@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
@@ -35,8 +36,8 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
         public async Task<CreateTaskResponseDto> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
-            string userId = _currentUser.UserId ?? throw new NotFoundException("User id not found!");
-            string userRole = _currentUser.Role ?? throw new NotFoundException("User role not found!");
+            string userId = _currentUser.UserId ?? throw new AuthenticationException("User id not found!");
+            string userRole = _currentUser.Role ?? throw new AuthenticationException("User role not found!");
 
             // checkPermission
             _permissionService.CanCreateTask(userRole);
@@ -50,7 +51,7 @@ namespace OpsFlow.Application.Tasks.Commands.CreateTask
             EnsureIncidentOpen(incident);
 
             // createTask
-            IncidentTask task = IncidentTask.Create(request.incidentId, request.title, request.note);
+            IncidentTask task = IncidentTask.Create(request.incidentId, request.title, userId, request.note);
             
             incident.AddTask(task);
             DateTime createdAt = _timeProvider.Now();

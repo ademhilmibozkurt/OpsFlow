@@ -1,3 +1,4 @@
+using System.Security.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using OpsFlow.Application.Abstractions.Persistence;
@@ -37,8 +38,8 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
         public async Task<AssignTaskResponseDto> Handle(AssignTaskCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
-            string userId = _currentUser.UserId ?? throw new NotFoundException("User id not found!");
-            string userRole = _currentUser.Role ?? throw new NotFoundException("User role not found!");
+            string userId = _currentUser.UserId ?? throw new AuthenticationException("User id not found!");
+            string userRole = _currentUser.Role ?? throw new AuthenticationException("User role not found!");
 
             // checkPermission
             _permissionService.CanAssignTask(userRole);

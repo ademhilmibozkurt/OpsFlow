@@ -119,6 +119,18 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        public void CanGetTaskDetail(string createdById, string userId, string userRole)
+        {
+            if (createdById == userId)
+            {
+                return;
+            }
+            else if (userRole == "User")
+            {
+                throw new ForbiddenException($"{userRole} can not get task detail!");
+            }
+        }
+
         
         // Users
         public void CanDeleteUser(string userId, string currentUserId, string userRole)
