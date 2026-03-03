@@ -56,6 +56,8 @@ namespace OpsFlow.Infrastructure.Services
         public async Task<string> GenerateChangeEmailTokenAsync(AppUser user, string newEmail)
         => await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
 
+        public async Task<IdentityResult> ChangeEmailAsync(AppUser user, string newEmail, string token)
+            => await _userManager.ChangeEmailAsync(user, newEmail, token);
         public async Task<bool> CheckPasswordAsync(AppUser user, string password)
             => await _userManager.CheckPasswordAsync(user, password);
 
