@@ -53,6 +53,9 @@ namespace OpsFlow.Infrastructure.Services
         public async Task<IQueryable<AppUser?>> FindByUserNameAsync(string userName)
             => _userManager.Users.Where(x => x.UserName == userName);
 
+        public async Task<string> GenerateChangeEmailTokenAsync(AppUser user, string newEmail)
+        => await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+
         public async Task<bool> CheckPasswordAsync(AppUser user, string password)
             => await _userManager.CheckPasswordAsync(user, password);
 

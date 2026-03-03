@@ -15,6 +15,7 @@ namespace OpsFlow.Application.Abstractions.Services
         Task<AppUser?> FindByIdAsync(string userId);
         Task<AppUser?> FindByEmailAsync(string email);
         Task<IQueryable<AppUser?>> FindByUserNameAsync(string userName); 
+        Task<string> GenerateChangeEmailTokenAsync(AppUser user, string newEmail);
         Task<bool> CheckPasswordAsync(AppUser user, string password);
         Task ChangePasswordAsync(AppUser user, string currentPassword, string newPassword);
         Task UpdateAsync(AppUser user);
