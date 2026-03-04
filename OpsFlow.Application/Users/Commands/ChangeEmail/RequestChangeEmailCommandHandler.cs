@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.WebUtilities;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
+using OpsFlow.Application.Events.EmailChangeRequested;
 using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Application.Users.Commands.ChangeEmail
@@ -59,7 +60,15 @@ namespace OpsFlow.Application.Users.Commands.ChangeEmail
                 $"&token={encodedToken}";
 
             // sendEmailNotification
-            await _mediatr.Publish();
+            await _mediatr.Publish
+            (
+                new EmailChangeRequestedEvent
+                (
+                    user.Id,
+                    request.newEmail,
+                    confirmLink
+                ), cancellationToken
+            );
         }
     }
 }
