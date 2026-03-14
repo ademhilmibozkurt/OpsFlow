@@ -8,12 +8,12 @@ using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Queries.GetIncidentDetail
 {
-    public class GetIncidentDetailCommandHandler : IRequestHandler<GetIncidentDetailCommand, IncidentDetailResponseDto>
+    public class GetIncidentDetailQueryHandler : IRequestHandler<GetIncidentDetailQuery, IncidentDetailResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
-        public GetIncidentDetailCommandHandler(
+        public GetIncidentDetailQueryHandler(
             IIncidentRepository incidentRepository,
             ICurrentUserService currentUser,
             IPermissionService permissionService)
@@ -23,7 +23,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentDetail
             _permissionService = permissionService;
         }
 
-        public async Task<IncidentDetailResponseDto> Handle(GetIncidentDetailCommand request, CancellationToken cancellationToken)
+        public async Task<IncidentDetailResponseDto> Handle(GetIncidentDetailQuery request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
