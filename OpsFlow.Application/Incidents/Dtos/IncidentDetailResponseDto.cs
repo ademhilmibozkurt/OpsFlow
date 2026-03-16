@@ -1,3 +1,4 @@
+using OpsFlow.Domain.Entities;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Dtos
@@ -7,7 +8,7 @@ namespace OpsFlow.Application.Incidents.Dtos
         string IncidentId,
         string Title,
         string Description,
-        IncidentPriority Priority,
+        IncidentPriority CurrentPriority,
         IncidentState CurrentState,
         bool IsAllTasksDone,
         DateTime CreatedAt
