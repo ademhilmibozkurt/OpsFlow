@@ -1,4 +1,6 @@
+using MediatR;
 using OpsFlow.Application.Incidents.Dtos;
+using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Application.Incidents.Queries.GetIncidents
 {
