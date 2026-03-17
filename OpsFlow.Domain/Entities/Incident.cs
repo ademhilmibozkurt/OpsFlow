@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Runtime.CompilerServices;
 using OpsFlow.Domain.Enums;
@@ -153,6 +154,41 @@ namespace OpsFlow.Domain.Entities
                 }
             }
             return true;
+        }
+
+        public int TaskCount()
+        {
+            return _tasks.Count;
+        }
+        
+        public int OpenTaskCount()
+        {
+            int count = 0;
+            foreach(IncidentTask task in _tasks)
+            {
+                if (task.TaskState == IncidentTaskState.Assigned ||
+                    task.TaskState == IncidentTaskState.Created ||
+                    task.TaskState == IncidentTaskState.InProgress)
+                {
+                    count += 1;
+                }
+            }
+            return count;
+        }
+
+        public int CompletedTaskCount()
+        {
+            int count = 0;
+            foreach(IncidentTask task in _tasks)
+            {
+                if (task.TaskState == IncidentTaskState.Done ||
+                    task.TaskState == IncidentTaskState.Aborted ||
+                    task.TaskState == IncidentTaskState.Deleted)
+                {
+                    count += 1;
+                }
+            }
+            return count;
         }
     }
 }

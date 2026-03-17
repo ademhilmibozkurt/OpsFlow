@@ -13,10 +13,13 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentDetail
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
-        public GetIncidentDetailQueryHandler(
+
+        public GetIncidentDetailQueryHandler
+        (
             IIncidentRepository incidentRepository,
             ICurrentUserService currentUser,
-            IPermissionService permissionService)
+            IPermissionService permissionService
+        )
         {
             _incidentRepository = incidentRepository;
             _currentUser = currentUser;
@@ -29,26 +32,38 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentDetail
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-            // findIncident
+            // checkPermission - everyone should get incident detail
+
+            // getIncident
             Incident incident = await _incidentRepository.GetByIdAsync(
                 request.incidentId,
                 cancellationToken)
                 ?? throw new NotFoundException("Incident not found!");
 
-            // checkPermission
-            _permissionService.CanGetIncidentDetail(incident.CreatedById, userId, userRole);
+            // isAllTaskDone
+            bool isAllTaskDone = incident.IsAllTasksDone();
 
-            // getTaskInfo
-            bool isTasksDone = incident.IsAllTasksDone();
+            // taskCount
+            int taskCount = incident.TaskCount();
 
+            // openTaskCount
+            int openTaskCount = incident.OpenTaskCount();
+
+            // completedTaskCount
+            int completedTaskCount = incident.CompletedTaskCount();
+
+            // returnDto
             return new IncidentDetailResponseDto
             (
-                incident.Id,
                 incident.Title,
                 incident.Description,
                 incident.Priority,
                 incident.State,
-                isTasksDone,
+                isAllTaskDone,
+                taskCount,
+                openTaskCount,
+                completedTaskCount,
+                incident.CreatedById,
                 incident.CreatedAt
             );
         }
