@@ -11,6 +11,13 @@ namespace OpsFlow.Domain.Entities
         private string _taskId;
         private string _note;
 
+        public string IncidentId => _incidentId;
+        public DateTime OccuredAt => _occuredAt;
+        public Enum EventType => _eventType;
+        public string PerformedById => _performedById;
+        public string TaskId => _taskId;
+        public string Note => _note;
+
         private IncidentHistory(string incidentId, string performedById, IncidentState eventType, DateTime occuredAt, string note)
         {
             _incidentId = incidentId;
