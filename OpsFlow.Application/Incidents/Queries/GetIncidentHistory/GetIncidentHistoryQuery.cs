@@ -8,5 +8,5 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
         string incidentId,
         int PageNumber = 1,
         int PageSize = 20
-    ) : IRequest<HistoryItemDto>; 
+    ) : IRequest<PaginatedResponseDto<HistoryItemDto>>; 
 }
