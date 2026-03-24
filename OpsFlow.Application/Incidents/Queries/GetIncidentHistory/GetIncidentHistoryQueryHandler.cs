@@ -50,7 +50,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
             int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
 
              // getQuery
-            IQueryable<IncidentHistory> query = await _historyRepository.Query(cancellationToken);
+            IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
 
             // getHistorys
             query = query.Where(x => x.Id == request.incidentId);

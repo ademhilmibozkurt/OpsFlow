@@ -25,7 +25,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             return await _context.Histories.FindAsync(incidentId, cancellationToken) ?? throw new NotFoundException("Incident history not found!");
         }
 
-        public async Task<IQueryable<IncidentHistory>> Query(CancellationToken cancellationToken)
+        public IQueryable<IncidentHistory> Query(CancellationToken cancellationToken)
         {
             return _context.Histories.AsNoTracking();
         }

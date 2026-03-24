@@ -33,7 +33,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidents
             int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
 
             // getQuery
-            IQueryable<Incident> query = await _incidentRepository.Query(cancellationToken);
+            IQueryable<Incident> query = _incidentRepository.Query(cancellationToken);
 
             // roleBaseFiltering
             if (userRole != "Admin")

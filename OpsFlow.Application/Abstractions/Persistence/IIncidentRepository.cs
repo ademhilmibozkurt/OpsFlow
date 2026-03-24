@@ -9,6 +9,6 @@ namespace OpsFlow.Application.Abstractions.Persistence
         Task<Incident> GetByIdAsync(string incidentId, CancellationToken cancellationToken);
         Task<List<Incident>> GetAllAsync(CancellationToken cancellationToken);
         Task DeleteAsync(Incident incident, CancellationToken cancellationToken);
-        Task<IQueryable<Incident>> Query(CancellationToken cancellationToken);
+        IQueryable<Incident> Query(CancellationToken cancellationToken);
     }
 }
