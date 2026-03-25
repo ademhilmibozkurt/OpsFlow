@@ -2,6 +2,7 @@ using System.Security.Authentication;
 using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Tasks.Dtos;
 using OpsFlow.Domain.Entities;
 
@@ -35,7 +36,11 @@ namespace OpsFlow.Application.Tasks.Queries.GetMyTasks
             IQueryable<IncidentTask> query = _incidentRepository.TaskQuery(cancellationToken);
 
             // getMyTasks
-            query = query.Where(x => x.AssigneeId == userId);
+            query = query.Where
+            (
+                x => x.AssigneeId == userId
+            ) 
+            ?? throw new NotFoundException("Task not found!");
 
             // sorting
             query = query.OrderByDescending(x => x.CreatedAt);
