@@ -45,5 +45,10 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
         {
             return _context.Incidents.AsNoTracking();
         }
+
+        public IQueryable<IncidentTask> TaskQuery(CancellationToken cancellationToken)
+        {
+            return _context.Tasks.AsNoTracking();
+        }
     }
 }
