@@ -22,6 +22,7 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanAbortTask(string userRole);
         void CanDeleteTask(string userRole);
         void CanGetTaskDetail(string createdById, string userId, string userRole);
+        void CanGetIncidentTasks(string createdById, string userId, string userRole);
 
         // users
         void CanDeleteUser(string userId, string currentUserId, string userRole);

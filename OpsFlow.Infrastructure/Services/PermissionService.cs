@@ -143,6 +143,18 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        public void CanGetIncidentTasks(string createdById, string userId, string userRole)
+        {
+            if (createdById == userId)
+            {
+                return;
+            }
+            else if (userRole != "Admin")
+            {
+                throw new ForbiddenException($"{userRole} can not get task detail!");
+            }
+        }
+
         
         // Users
         public void CanDeleteUser(string userId, string currentUserId, string userRole)
