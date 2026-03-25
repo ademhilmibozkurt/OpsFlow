@@ -3,18 +3,17 @@ using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
-using OpsFlow.Application.Incidents.Dtos;
 using OpsFlow.Application.Tasks.Dtos;
 using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
 {
-    public class GetTaskDetailCommandHandler : IRequestHandler<GetTaskDetailCommand, TaskDetailResponseDto>
+    public class GetTaskDetailQueryHandler : IRequestHandler<GetTaskDetailQuery, TaskDetailResponseDto>
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICurrentUserService _currentUser;
         private readonly IPermissionService _permissionService;
-        public GetTaskDetailCommandHandler(
+        public GetTaskDetailQueryHandler(
             IIncidentRepository incidentRepository,
             ICurrentUserService currentUser,
             IPermissionService permissionService)
@@ -24,7 +23,7 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
             _permissionService = permissionService;
         }
 
-        public async Task<TaskDetailResponseDto> Handle(GetTaskDetailCommand request, CancellationToken cancellationToken)
+        public async Task<TaskDetailResponseDto> Handle(GetTaskDetailQuery request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
