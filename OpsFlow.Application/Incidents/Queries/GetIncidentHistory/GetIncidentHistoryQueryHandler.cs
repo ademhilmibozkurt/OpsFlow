@@ -53,7 +53,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
             IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
 
             // getHistorys
-            query = query.Where(x => x.Id == request.incidentId);
+            query = query.Where(x => x.IncidentId == request.incidentId);
 
             // orderByDate
             query = query.OrderByDescending(x => x.OccuredAt);
