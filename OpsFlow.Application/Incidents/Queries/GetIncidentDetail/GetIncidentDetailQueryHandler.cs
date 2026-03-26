@@ -12,18 +12,15 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentDetail
     {
         private readonly IIncidentRepository _incidentRepository;
         private readonly ICurrentUserService _currentUser;
-        private readonly IPermissionService _permissionService;
 
         public GetIncidentDetailQueryHandler
         (
             IIncidentRepository incidentRepository,
-            ICurrentUserService currentUser,
-            IPermissionService permissionService
+            ICurrentUserService currentUser
         )
         {
             _incidentRepository = incidentRepository;
             _currentUser = currentUser;
-            _permissionService = permissionService;
         }
 
         public async Task<IncidentDetailResponseDto> Handle(GetIncidentDetailQuery request, CancellationToken cancellationToken)
