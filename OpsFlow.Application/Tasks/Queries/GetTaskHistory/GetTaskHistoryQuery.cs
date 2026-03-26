@@ -3,7 +3,7 @@ using OpsFlow.Application.Tasks.Dtos;
 
 namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
 {
-    public sealed record GetIncidentHistoryQuery
+    public sealed record GetTaskHistoryQuery
     (
         string taskId,
         string incidentId,

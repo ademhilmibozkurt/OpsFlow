@@ -4,7 +4,6 @@ using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Incidents.Dtos;
-using OpsFlow.Application.Incidents.Queries.GetIncidents;
 using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
@@ -67,7 +66,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
                 .Take(pageSize)
                 .Select(x => new HistoryItemDto
                 (
-                    x.Id,
+                    incident.Id,
                     x.PerformedById,
                     x.EventType,
                     x.OccuredAt,
