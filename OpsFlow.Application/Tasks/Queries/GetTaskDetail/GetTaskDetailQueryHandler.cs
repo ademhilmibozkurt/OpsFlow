@@ -35,10 +35,16 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
                 cancellationToken)
                 ?? throw new NotFoundException("Incident not found!");
 
+            // getQuery
+            IQueryable<IncidentTask> query = _incidentRepository.TaskQuery(cancellationToken);
+
             // findTask
-            IncidentTask task = incident.GetTask(
-                request.taskId)
-                ?? throw new NotFoundException("Task not found!");
+            query = query.Where
+            (
+                x => x.IncidentId == incident.Id && x.Id == request.taskId
+            );
+            
+            IncidentTask task = query.FirstOrDefault() ?? throw new NullReferenceException("Task is null!");
 
             // checkPermission
             _permissionService.CanGetTaskDetail(task.CreatedById, userId, userRole);
