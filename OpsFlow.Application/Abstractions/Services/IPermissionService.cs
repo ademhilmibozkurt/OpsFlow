@@ -31,5 +31,6 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanChangePassword(string currentUserId, string userId);
         void CanUpdateProfile(string currentUserId, string userId, string Role);
         void CanChangeUserName(string currentUserId, string userId);
+        void CanGetUserDetail(string userRole);
     }
 }
