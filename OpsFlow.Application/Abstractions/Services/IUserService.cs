@@ -22,5 +22,6 @@ namespace OpsFlow.Application.Abstractions.Services
         Task ChangePasswordAsync(AppUser user, string currentPassword, string newPassword);
         Task UpdateAsync(AppUser user);
         Task Delete(AppUser user);
+        Task<IQueryable<AppUser>> Query();
     }
 }

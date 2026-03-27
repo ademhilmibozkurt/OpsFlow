@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
@@ -70,5 +71,8 @@ namespace OpsFlow.Infrastructure.Services
 
         public async Task Delete(AppUser user)
             => await _userManager.DeleteAsync(user);
+
+        public async Task<IQueryable<AppUser>> Query()
+            => _userManager.Users;
     }
 }

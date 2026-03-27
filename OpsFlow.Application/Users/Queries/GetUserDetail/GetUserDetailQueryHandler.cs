@@ -34,7 +34,7 @@ namespace OpsFlow.Application.Users.Queries.GetUserDetail
             _permissionService.CanGetUserDetail(userRole);
 
             // getQuery
-            IQueryable<AppUser> query = _userService.Query();
+            IQueryable<AppUser> query = await _userService.Query();
 
             // getUserDetail
             query = query.Where(x => x.Id == request.userId);
