@@ -1,17 +1,75 @@
-// getCurrentUser
+using System.Security.Authentication;
+using MediatR;
+using OpsFlow.Application.Abstractions.Services;
+using OpsFlow.Application.Identity;
+using OpsFlow.Application.Users.Dtos;
 
-// checkPermission
+namespace OpsFlow.Application.Users.Queries.GetUsers
+{
+    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PaginatedResponseDto<UserItemDto>>
+    {
+        private readonly IUserService _userService;
+        private readonly ICurrentUserService _currentUser;
+        private readonly IPermissionService _permissionService;
 
-// getQuery - UserManager.Users (IQueryable)
+        public GetUsersQueryHandler
+        (
+            IUserService userService,
+            ICurrentUserService currentUser,
+            IPermissionService permissionService
+        )
+        {
+            _userService = userService;
+            _currentUser = currentUser;
+            _permissionService = permissionService;
+        }
 
-// filtering
+        public async Task<PaginatedResponseDto<UserItemDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        {
+            // getCurrentUser
+            string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-// sorting
+            // checkPermission
+            _permissionService.CanGetUsers(userRole);
 
-// getTotalCount
+            // getQuery
+            IQueryable<AppUser> query = await _userService.Query();
 
-// setPageSize
+            // filtering
 
-// pagination
+            // sorting
+            query = query.OrderByDescending(x => x.CreatedAt);
 
-// returnDto
+            // getTotalCount
+            int totalCount = query.Count();
+
+            // setPageSize
+            int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
+            int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
+
+            // pagination
+            var items = query
+                .Skip((pageNumber -1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new UserItemDto
+                (
+                    x.Id,
+                    x.FullName,
+                    x.UserName,
+                    x.Email,
+                    x.PhoneNumber,
+                    x.Role,
+                    x.CreatedAt
+                )).ToList();
+
+            // returnDto
+            return new PaginatedResponseDto<UserItemDto>
+            (
+                items,
+                pageNumber,
+                pageSize,
+                totalCount
+            );
+        }
+    }
+}
