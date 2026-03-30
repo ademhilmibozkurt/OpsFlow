@@ -5,7 +5,6 @@ namespace OpsFlow.Application.Users.Dtos
         string UserId,
         string FullName,
         string UserName,
-        string EventTitle,
         Enum EventType,
         DateTime DoneAt,
         string EventIncidentId,
