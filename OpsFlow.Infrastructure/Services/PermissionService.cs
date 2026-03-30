@@ -225,5 +225,13 @@ namespace OpsFlow.Infrastructure.Services
                 throw new ForbiddenException($"{userRole} can not get user detail!");
             }
         }
+
+        public void CanGetUsers(string userRole)
+        {
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException($"{userRole} can not get user detail!");
+            }
+        }
     }
 }
