@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Security.Authentication;
 using MediatR;
 using OpsFlow.Application.Abstractions.Services;
@@ -36,6 +37,10 @@ namespace OpsFlow.Application.Users.Queries.GetUsers
             IQueryable<AppUser> query = await _userService.Query();
 
             // filtering
+            if (request.getConfirmed)
+            {
+                query = query.Where(x => x.EmailConfirmed);   
+            }
 
             // sorting
             query = query.OrderByDescending(x => x.CreatedAt);
