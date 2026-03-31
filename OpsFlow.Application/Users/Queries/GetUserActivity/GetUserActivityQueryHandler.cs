@@ -38,11 +38,8 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
             // checkPermission
             _permissionService.CanGetUserActivity(userRole);
 
-            // getUser
-            AppUser user = await _userService.FindByIdAsync
-            (
-                request.userId
-            ) ?? throw new NotFoundException("Wanted user not found!");
+            // getUserQuery
+            IQueryable<AppUser> userQuery = await _userService.Query();
 
             // getHistoryQuery
             IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
@@ -67,9 +64,6 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
                 query = query.Where(x => x.OccuredAt <= request.toDate);
             }
 
-            // sorting
-            query = query.OrderByDescending(x => x.OccuredAt);
-
             // getTotalCount
             int totalCount = query.Count();
 
@@ -77,20 +71,28 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
             int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
             int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
 
-            // pagination
+            // sorting + joining + pagination
             var items = query
+                .OrderByDescending(h => h.OccuredAt)
+                .Join
+                (
+                    userQuery,
+                    h => h.PerformedById,
+                    u => u.Id,
+                    (h,u) => new UserActivityItemDto
+                    (
+                        u.Id,
+                        u.FullName,
+                        u.UserName,
+                        h.EventType,
+                        h.OccuredAt,
+                        h.IncidentId,
+                        h.TaskId
+                    )
+                )
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new UserActivityItemDto
-                (
-                    user.Id,
-                    user.FullName,
-                    user.UserName,
-                    x.EventType,
-                    x.OccuredAt,
-                    x.IncidentId,
-                    x.TaskId
-                )).ToList();
+                .ToList(); 
 
             // returnDto
             return new PaginatedResponseDto<UserActivityItemDto>
