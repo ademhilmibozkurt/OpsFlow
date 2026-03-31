@@ -6,6 +6,9 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
     public sealed record GetUserActivityQuery
     (
         string userId,
+        DateTime? fromDate,
+        DateTime? toDate,
+        bool onlyTasks = false,
         int PageNumber = 1,
         int PageSize = 20
     ) : IRequest<PaginatedResponseDto<UserActivityItemDto>>;
