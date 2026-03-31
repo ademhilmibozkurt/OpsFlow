@@ -35,6 +35,9 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
             // getCurrentUser
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
+            // checkPermission
+            _permissionService.CanGetUserActivity(userRole);
+
             // getUser
             AppUser user = await _userService.FindByIdAsync
             (
@@ -45,15 +48,27 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
             IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
 
             // filtering - PerformedBy == userId
-                // filterByTask
             query = query.Where(x => x.PerformedById == request.userId);
-            
-                // filterByIncident
 
-            // combineQueries
+            // filterByTask
+            if (request.onlyTasks)
+            {
+                query = query.Where(x => x.TaskId != null);
+            }
+
+            // filterByDate
+            if (request.fromDate.HasValue)
+            {
+                query = query.Where(x => x.OccuredAt >= request.fromDate);
+            }
+
+            if (request.toDate.HasValue)
+            {
+                query = query.Where(x => x.OccuredAt <= request.toDate);
+            }
 
             // sorting
-            query.OrderByDescending(x => x.OccuredAt);
+            query = query.OrderByDescending(x => x.OccuredAt);
 
             // getTotalCount
             int totalCount = query.Count();
