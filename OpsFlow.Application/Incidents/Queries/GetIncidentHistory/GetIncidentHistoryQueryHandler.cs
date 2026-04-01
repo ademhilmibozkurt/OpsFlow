@@ -4,7 +4,6 @@ using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Incidents.Dtos;
-using OpsFlow.Domain.Entities;
 
 namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
 {
@@ -35,43 +34,39 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-            // findIncident
-            Incident incident = await _incidentRepository.GetByIdAsync(
-                request.incidentId,
-                cancellationToken)
-                ?? throw new NotFoundException("Incident not found!");
-
-            // checkPermission
-            _permissionService.CanGetIncidentHistory(incident.CreatedById, userId, userRole);
-
-             // setPageSize
-            int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
-            int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
-
-             // getQuery
-            IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
-
-            // getHistorys
-            query = query.Where(x => x.IncidentId == request.incidentId);
-
-            // orderByDate
-            query = query.OrderByDescending(x => x.OccuredAt);
+            // getQueries - join + permission check
+            var query =
+                from h in _historyRepository.Query(cancellationToken)
+                join i in _incidentRepository.Query(cancellationToken)
+                    on h.IncidentId equals i.Id
+                where i.Id == request.incidentId
+                    && 
+                    (
+                            _permissionService.CanGetIncidentHistory(i.CreatedById, userId, userRole)
+                    )
+                select new HistoryItemDto
+                (
+                    i.Id,
+                    h.PerformedById,
+                    h.EventType,
+                    h.OccuredAt,
+                    h.Note
+                );
 
             // getTotalCount
             int totalCount = query.Count();
 
-            // paginate
+            // setPageSize
+            int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
+            int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
+
+            // paginate + sort
             var items = query
+                .OrderByDescending(x => x.OccuredAt)
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new HistoryItemDto
-                (
-                    incident.Id,
-                    x.PerformedById,
-                    x.EventType,
-                    x.OccuredAt,
-                    x.Note
-                )).ToList();
+                .ToList()
+                ?? throw new NotFoundException("Query result not found!");
 
             //  returnDto
             return new PaginatedResponseDto<HistoryItemDto>

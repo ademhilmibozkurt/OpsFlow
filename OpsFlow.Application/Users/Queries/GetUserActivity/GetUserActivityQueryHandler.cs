@@ -92,7 +92,8 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
                 )
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
-                .ToList(); 
+                .ToList()
+                ?? throw new NotFoundException("Query result not found!"); 
 
             // returnDto
             return new PaginatedResponseDto<UserActivityItemDto>

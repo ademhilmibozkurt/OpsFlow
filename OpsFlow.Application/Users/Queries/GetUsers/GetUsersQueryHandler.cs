@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using System.Security.Authentication;
 using MediatR;
 using OpsFlow.Application.Abstractions.Services;
