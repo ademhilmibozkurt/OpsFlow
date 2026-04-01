@@ -29,39 +29,33 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-            // findIncident
-            Incident incident = await _incidentRepository.GetByIdAsync(
-                request.incidentId,
-                cancellationToken)
-                ?? throw new NotFoundException("Incident not found!");
-
-            // getQuery
-            IQueryable<IncidentTask> query = _incidentRepository.TaskQuery(cancellationToken);
-
-            // findTask
-            query = query.Where
-            (
-                x => x.IncidentId == incident.Id && x.Id == request.taskId
-            );
-            
-            IncidentTask task = query.FirstOrDefault() ?? throw new NullReferenceException("Task is null!");
-
+            // getJoinedQueries 
+            var query = 
+                from i in _incidentRepository.Query(cancellationToken)
+                join t in _incidentRepository.TaskQuery(cancellationToken)
+                on i.Id equals t.Id
+                where t.Id == request.taskId
+                select new TaskDetailResponseDto
+                (
+                    t.Id,
+                    i.Id,
+                    t.Title,
+                    t.Note,
+                    t.AbortionNote,
+                    i.Title,
+                    t.CreatedById,
+                    t.AssigneeId,
+                    t.CreatedAt
+                );
+                
             // checkPermission
-            _permissionService.CanGetTaskDetail(task.CreatedById, userId, userRole);
+            // _permissionService.CanGetTaskDetail(task.CreatedById, userId, userRole);
+
+            // sorting
+            query = query.OrderByDescending(t => t.CreatedAt);
 
             // returnDto
-            return new TaskDetailResponseDto
-            (
-                task.Id,
-                incident.Id,
-                task.Title,
-                task.Note,
-                task.AbortionNote,
-                incident.Title,
-                task.CreatedById,
-                task.AssigneeId,
-                task.CreatedAt
-            );
+            return query.FirstOrDefault() ?? throw new NotFoundException("Task detail not found!");
         }
     }
 }

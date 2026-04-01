@@ -46,12 +46,16 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
                 select new HistoryItemDto
                 (
                     t.Id,
+                    t.IncidentId,
                     h.PerformedById,
                     t.Title,
                     h.Note,
                     h.EventType,
                     h.OccuredAt
                 );
+
+            // checkPermission
+            // _permissionService.CanGetTaskHistory(t.CreatedById, userId, userRole);
 
             // getTotalCount
             int totalCount = query.Count();
