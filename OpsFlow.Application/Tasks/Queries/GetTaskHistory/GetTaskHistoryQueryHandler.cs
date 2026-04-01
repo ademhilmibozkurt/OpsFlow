@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Security.Authentication;
 using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
@@ -61,6 +62,7 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
 
             // pagination + sorting
             var items = query
+                .OrderByDescending(h => h.OccuredAt)
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
                 .ToList() 
