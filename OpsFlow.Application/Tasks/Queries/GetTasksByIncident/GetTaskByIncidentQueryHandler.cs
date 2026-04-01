@@ -51,6 +51,7 @@ namespace OpsFlow.Application.Tasks.Queries.GetTasksByIncident
                 x => x.IncidentId == incident.Id
             ) ?? throw new NotFoundException("Incident not found!");*/ 
 
+            // getJoinedQueries 
             var query = 
                 from i in _incidentRepository.Query(cancellationToken)
                 join t in _incidentRepository.TaskQuery(cancellationToken)
@@ -68,6 +69,9 @@ namespace OpsFlow.Application.Tasks.Queries.GetTasksByIncident
                     t.CreatedAt,
                     t.AbortionNote
                 );
+
+            // checkPermission
+            // _permissionService.CanGetIncidentTasks(incident.CreatedById, userId, userRole);
 
             // getTotalCount
             int totalCount = query.Count();

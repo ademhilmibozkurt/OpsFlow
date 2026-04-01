@@ -36,49 +36,35 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-            // findIncident
-            Incident incident = await _incidentRepository.GetByIdAsync
-            (
-                request.incidentId,
-                cancellationToken
-            ) ?? throw new NotFoundException("Incident not found!");
+            // getJoinedQueries
+            var query =
+                from h in _historyRepository.Query(cancellationToken)
+                join t in _incidentRepository.TaskQuery(cancellationToken)
+                on h.TaskId equals t.Id
+                where t.Id == request.taskId
+                select new HistoryItemDto
+                (
+                    t.Id,
+                    h.PerformedById,
+                    t.Title,
+                    h.Note,
+                    h.EventType,
+                    h.OccuredAt
+                );
 
-            // getTask
-            IncidentTask task = incident.GetTask(request.taskId);
-
-            // checkPermission
-            _permissionService.CanGetTaskHistory(task.CreatedById, userId, userRole);
-
-            // getQuery
-            IQueryable<IncidentHistory> query = _historyRepository.Query(cancellationToken);
-
-            // getHistory
-            query = query.Where(x => x.TaskId == task.Id);
-
-            // sorting
-            query = query.OrderByDescending(x => x.OccuredAt);
+            // getTotalCount
+            int totalCount = query.Count();
 
              // setPageSize
             int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
             int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
 
-            // getTotalCount
-            int totalCount = query.Count();
-
-            // paginate
+            // pagination + sorting
             var items = query
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new HistoryItemDto
-                (
-                    task.Id,
-                    incident.Id,
-                    x.PerformedById,
-                    task.Title,
-                    x.Note,
-                    x.EventType,
-                    x.OccuredAt
-                )).ToList();  
+                .ToList() 
+                ?? throw new NotFoundException("Task history not found!");  
 
             // returnDto
             return new PaginatedResponseDto<HistoryItemDto>
