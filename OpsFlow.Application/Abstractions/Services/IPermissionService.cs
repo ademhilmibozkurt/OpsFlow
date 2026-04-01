@@ -12,7 +12,7 @@ namespace OpsFlow.Application.Abstractions.Services
         void CanInvestigateIncident(string userRole);
         void CanDeleteIncident(string userRole);
         void CanGetIncidentDetail(string createdById, string userId, string userRole);
-        bool CanGetIncidentHistory(string createdById, string userId, string userRole);
+        void CanGetIncidentHistory(string createdById, string userId, string userRole);
     
         // tasks
         void CanCreateTask(string userRole);

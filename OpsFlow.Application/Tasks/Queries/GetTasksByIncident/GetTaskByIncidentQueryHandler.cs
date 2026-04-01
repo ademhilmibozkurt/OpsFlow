@@ -32,11 +32,7 @@ namespace OpsFlow.Application.Tasks.Queries.GetTasksByIncident
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
             string userRole = _currentUser.Role ?? throw new AuthenticationException("User not authenticated!");
 
-            // setPageSize
-            int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
-            int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
-
-            // findIncident
+            /*// findIncident
             Incident incident = await _incidentRepository.GetByIdAsync
             (
                 request.incidentId, 
@@ -47,36 +43,46 @@ namespace OpsFlow.Application.Tasks.Queries.GetTasksByIncident
             _permissionService.CanGetIncidentTasks(incident.CreatedById, userId, userRole);
 
             // getQuery
-            IQueryable<IncidentTask> query = _incidentRepository.TaskQuery(cancellationToken);
+            IQueryable<IncidentTask> query = _incidentRepository.TaskQuery(cancellationToken); 
             
             // getTasks
             query = query.Where
             (
                 x => x.IncidentId == incident.Id
-            ) ?? throw new NotFoundException("Incident not found!");
+            ) ?? throw new NotFoundException("Incident not found!");*/ 
 
-            // sorting
-            query = query.OrderByDescending(x => x.CreatedAt);
+            var query = 
+                from i in _incidentRepository.Query(cancellationToken)
+                join t in _incidentRepository.TaskQuery(cancellationToken)
+                on i.Id equals t.IncidentId
+                where t.IncidentId == request.incidentId
+                select new TaskListItemDto
+                (
+                    t.Id,
+                    t.IncidentId,
+                    t.CreatedById,
+                    t.AssigneeId,
+                    t.Title,
+                    t.Note,
+                    t.TaskState,
+                    t.CreatedAt,
+                    t.AbortionNote
+                );
 
             // getTotalCount
             int totalCount = query.Count();
 
-            // pagination
+            // setPageSize
+            int pageSize = request.PageSize > 100 ? 100 : request.PageSize;
+            int pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
+
+            // pagination + sorting
             var items = query
+                .OrderByDescending(t => t.CreatedAt)
                 .Skip((pageNumber -1) * pageSize)
                 .Take(pageSize)
-                .Select(x => new TaskListItemDto
-                (
-                    x.Id,
-                    x.IncidentId,
-                    x.CreatedById,
-                    x.AssigneeId,
-                    x.Title,
-                    x.Note,
-                    x.TaskState,
-                    x.CreatedAt,
-                    x.AbortionNote
-                )).ToList();
+                .ToList()
+                ?? throw new NotFoundException("Tasks not found!");
 
             // returnDto
             return new PaginatedResponseDto<TaskListItemDto>

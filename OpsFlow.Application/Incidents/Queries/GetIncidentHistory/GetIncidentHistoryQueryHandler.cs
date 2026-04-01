@@ -40,10 +40,6 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
                 join i in _incidentRepository.Query(cancellationToken)
                     on h.IncidentId equals i.Id
                 where i.Id == request.incidentId
-                    && 
-                    (
-                            _permissionService.CanGetIncidentHistory(i.CreatedById, userId, userRole)
-                    )
                 select new HistoryItemDto
                 (
                     i.Id,
@@ -52,6 +48,9 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
                     h.OccuredAt,
                     h.Note
                 );
+
+            // checkPermission
+            // _permissionService.CanGetIncidentHistory(i.CreatedById, userId, userRole);
 
             // getTotalCount
             int totalCount = query.Count();
