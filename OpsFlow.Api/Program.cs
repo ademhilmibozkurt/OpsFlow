@@ -1,5 +1,9 @@
 using System.Text;
+using FluentValidation;
+using MediatR;
 using Microsoft.IdentityModel.Tokens;
+using OpsFlow.Application;
+using OpsFlow.Application.Common.Behaviors;
 using OpsFlow.Infrastructure.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +29,18 @@ builder.Services.AddAuthentication("Bearer")
                 Encoding.UTF8.GetBytes(jwtSettings.Secret))
         };
     });
+
+
+builder.Services.AddControllers();
+
+// MediatR Assembly Reference
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly));
+
+// FluentValidation Assembly Reference
+builder.Services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
+
+// ValidationPipeline
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 
 var app = builder.Build();
 
