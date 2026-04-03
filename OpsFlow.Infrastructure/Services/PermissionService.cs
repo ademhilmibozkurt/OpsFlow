@@ -13,18 +13,6 @@ namespace OpsFlow.Infrastructure.Services
             return;
         }
 
-        public void CanChangePriority(string userRole, string userId, string createdById)
-        {
-            if (createdById == userId)
-            {
-                return;
-            }
-            else if (userRole == "User")
-            {
-                throw new ForbiddenException($"{userRole} can not change incident priority!");
-            }
-        }
-
         public void CanCloseIncident(string userRole)
         {
             if (userRole == "User")
@@ -57,6 +45,18 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
+        public void CanChangePriority(string userRole, string userId, string createdById)
+        {
+            if (createdById == userId)
+            {
+                return;
+            }
+            else if (userRole == "User")
+            {
+                throw new ForbiddenException($"{userRole} can not change incident priority!");
+            }
+        }
+
         public void CanGetIncidentDetail(string createdById, string userId, string userRole)
         {
             if (createdById == userId)
@@ -69,16 +69,17 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
-        public void CanGetIncidentHistory(string createdById, string userId, string userRole)
+        public bool CanGetIncidentHistory(string createdById, string userId, string userRole)
         {
             if (createdById == userId)
             {
-                return;
+                return true;
             }
             else if (userRole == "User")
             {
                 throw new ForbiddenException($"{userRole} can not get incident detail!");
             }
+            return true;
         }
 
 
@@ -99,22 +100,6 @@ namespace OpsFlow.Infrastructure.Services
             }
         }
 
-        public void CanStartTask(string userId, string assignedId)
-        {
-            if (userId != assignedId)
-            {
-                throw new ForbiddenException($"User {userId} can not start task. User not assigned the task!");
-            }
-        }
-
-        public void CanCloseTask(string userId, string assignedId)
-        {
-            if (userId != assignedId)
-            {
-                throw new ForbiddenException($"User {userId} can not close task. User not assigned the task!");
-            }
-        }
-
         public void CanAbortTask(string userRole)
         {
             if (userRole == "User")
@@ -128,6 +113,22 @@ namespace OpsFlow.Infrastructure.Services
             if (userRole == "User")
             {
                 throw new ForbiddenException("User can not delete task!");
+            }
+        }
+
+        public void CanStartTask(string userId, string assignedId)
+        {
+            if (userId != assignedId)
+            {
+                throw new ForbiddenException($"User {userId} can not start task. User not assigned the task!");
+            }
+        }
+
+        public void CanCloseTask(string userId, string assignedId)
+        {
+            if (userId != assignedId)
+            {
+                throw new ForbiddenException($"User {userId} can not close task. User not assigned the task!");
             }
         }
 
@@ -168,53 +169,11 @@ namespace OpsFlow.Infrastructure.Services
         }
         
         // Users
-        public void CanDeleteUser(string userId, string currentUserId, string userRole)
-        {
-            if (userId == currentUserId)
-            {
-                return ;
-            }
-
-            if (userRole != "Admin")
-            {
-                throw new ForbiddenException("User can not delete user!");
-            }
-        }
-
         public void CanChangeRole(string userRole)
         {
             if (userRole != "Admin")
             {
                 throw new ForbiddenException($"{userRole} can not change role!");
-            }
-        }
-
-        public void CanChangePassword(string currentUserId, string userId)
-        {
-            if(currentUserId != userId)
-            {
-                throw new ForbiddenException("Only account owner can change password!");
-            }
-        }
-
-        public void CanUpdateProfile(string currentUserId, string userId, string userRole)
-        {
-            if (userId == currentUserId)
-            {
-                return ;
-            }
-
-            if (userRole != "Admin")
-            {
-                throw new ForbiddenException($"{userRole} can not update profile!");
-            }
-        }
-
-        public void CanChangeUserName(string currentUserId, string userId)
-        {
-            if (currentUserId != userId)
-            {
-                throw new ForbiddenException("Only account owner change user name!");
             }
         }
 
@@ -239,6 +198,48 @@ namespace OpsFlow.Infrastructure.Services
             if (userRole != "Admin")
             {
                 throw new ForbiddenException($"{userRole} can not get user activity!");
+            }
+        }
+
+        public void CanChangeUserName(string currentUserId, string userId)
+        {
+            if (currentUserId != userId)
+            {
+                throw new ForbiddenException("Only account owner change user name!");
+            }
+        }
+
+        public void CanChangePassword(string currentUserId, string userId)
+        {
+            if(currentUserId != userId)
+            {
+                throw new ForbiddenException("Only account owner can change password!");
+            }
+        }
+
+        public void CanUpdateProfile(string currentUserId, string userId, string userRole)
+        {
+            if (userId == currentUserId)
+            {
+                return ;
+            }
+
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException($"{userRole} can not update profile!");
+            }
+        }
+
+        public void CanDeleteUser(string userId, string currentUserId, string userRole)
+        {
+            if (userId == currentUserId)
+            {
+                return ;
+            }
+
+            if (userRole != "Admin")
+            {
+                throw new ForbiddenException("User can not delete user!");
             }
         }
     }
