@@ -8,15 +8,27 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
         {
             RuleFor(v => v.title)
                 .NotEmpty()
+                .WithMessage("Title can not null!");
+
+            RuleFor(v => v.title)
                 .Must(d => d is string)
-                .Length(12)
-                .WithMessage("Title can not null. Must be string type!");
+                .WithMessage("Title must be string type!");
+
+            RuleFor(v => v.title)
+                .Matches("(\b\\w+\b.*){2}")
+                .WithMessage("Title must at least two word!");
 
             RuleFor(v => v.description)
                 .NotEmpty()
+                .WithMessage("Description can not null!");
+
+            RuleFor(v => v.description)
                 .Must(d => d is string)
+                .WithMessage("Description must be string!");
+            
+            RuleFor(v => v.description)
                 .Length(20)
-                .WithMessage("Description can not null and must be string!");
+                .WithMessage("Description must at least 20 characters!");
         }
     }
 }
