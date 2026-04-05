@@ -8,8 +8,11 @@ namespace OpsFlow.Application.Incidents.Commands.InvestigateIncident
         {
             RuleFor(v => v.incidentId)
                 .NotEmpty()
+                .WithMessage("IncidentId can not null!");
+
+            RuleFor(v => v.incidentId)
                 .Must(d => d is string)
-                .WithMessage("IncidentId can not null. Must be string type!");
+                .WithMessage("IncidentId must be string type!");
         }
     }
 }
