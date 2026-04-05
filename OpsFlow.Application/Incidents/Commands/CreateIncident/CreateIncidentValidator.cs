@@ -16,7 +16,7 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
 
             RuleFor(v => v.title)
                 .Matches("(\b\\w+\b.*){2}")
-                .WithMessage("Title must at least two word!");
+                .WithMessage("Title must at least two words!");
 
             RuleFor(v => v.description)
                 .NotEmpty()
@@ -27,8 +27,8 @@ namespace OpsFlow.Application.Incidents.Commands.CreateIncident
                 .WithMessage("Description must be string!");
             
             RuleFor(v => v.description)
-                .Length(20)
-                .WithMessage("Description must at least 20 characters!");
+                .Matches("(\b\\w+\b.*){3}")
+                .WithMessage("Description must at least three words!");
         }
     }
 }
