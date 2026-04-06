@@ -33,7 +33,7 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
             var query = 
                 from i in _incidentRepository.Query(cancellationToken)
                 join t in _incidentRepository.TaskQuery(cancellationToken)
-                on i.Id equals t.Id
+                on i.Id equals t.IncidentId
                 where t.Id == request.taskId
                 select new TaskDetailResponseDto
                 (
