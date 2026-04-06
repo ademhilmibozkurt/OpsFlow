@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
+namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
 {
-    public class GetTaskDetailValidator : AbstractValidator<GetTaskDetailQuery>
+    public class GetTaskHistoryValidator : AbstractValidator<GetTaskHistoryQuery>
     {
-        public GetTaskDetailValidator()
+        public GetTaskHistoryValidator()
         {
             RuleFor(v => v.taskId)
                 .NotEmpty()
