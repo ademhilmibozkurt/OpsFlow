@@ -23,7 +23,7 @@ namespace OpsFlow.Application.Users.Commands.ChangePassword
                 .WithMessage("NewPassword must be string!");    
 
             RuleFor(v => v.newPassword)
-                .Matches("(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}")
+                .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
                 .WithMessage("NewPassword must be valid format!");
         }
     }
