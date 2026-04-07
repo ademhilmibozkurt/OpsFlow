@@ -2,5 +2,5 @@ using MediatR;
 
 namespace OpsFlow.Application.Users.Commands.ChangeEmail
 {
-    public record ConfirmChangeEmailCommand(string userId, string newEmail, string token) : IRequest;
+    public record ConfirmEmailChangeCommand(string userId, string newEmail, string token) : IRequest;
 }

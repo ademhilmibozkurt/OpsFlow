@@ -9,7 +9,7 @@ using OpsFlow.Application.Identity;
 
 namespace OpsFlow.Application.Users.Commands.ChangeEmail
 {
-    public class ConfirmChangeEmailCommandHandler : IRequestHandler<ConfirmChangeEmailCommand>
+    public class ConfirmChangeEmailCommandHandler : IRequestHandler<ConfirmEmailChangeCommand>
     {
         private readonly IMediator _mediatr;
         private readonly IUserService _userService;
@@ -30,7 +30,7 @@ namespace OpsFlow.Application.Users.Commands.ChangeEmail
             _tokenRepository = tokenRepository;
         }
 
-        public async Task Handle(ConfirmChangeEmailCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ConfirmEmailChangeCommand request, CancellationToken cancellationToken)
         {
             // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");
