@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using OpsFlow.Application;
 using OpsFlow.Application.Common.Behaviors;
+using OpsFlow.Infrastructure;
 using OpsFlow.Infrastructure.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,9 @@ builder.Services.AddAuthentication("Bearer")
 
 
 builder.Services.AddControllers();
+
+// Infrastructure Services
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // MediatR Assembly Reference
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly));

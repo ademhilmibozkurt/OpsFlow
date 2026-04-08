@@ -17,11 +17,6 @@ namespace OpsFlow.Infrastructure
             IConfiguration configuration
         )
         {
-            // DbContext
-            // Repositories
-            // Identity
-            // Services
-            // add DbContext to services
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString(""));
