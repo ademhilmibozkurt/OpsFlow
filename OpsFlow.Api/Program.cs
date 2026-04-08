@@ -1,9 +1,6 @@
 using System.Text;
-using FluentValidation;
-using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using OpsFlow.Application;
-using OpsFlow.Application.Common.Behaviors;
 using OpsFlow.Infrastructure;
 using OpsFlow.Infrastructure.Settings;
 
@@ -12,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // add jwt settings configuration
 var jwtSettings = builder.Configuration
     .GetSection("JwtSettings")
-    .Get<JwtSettings>();
+    .Get<JwtSettings>()
+    ?? throw new NullReferenceException("Jwt settings is null!");
 
 // add jwt bearer
 builder.Services.AddAuthentication("Bearer")
@@ -31,6 +29,7 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 
