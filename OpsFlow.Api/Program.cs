@@ -37,14 +37,8 @@ builder.Services.AddControllers();
 // Infrastructure Services
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// MediatR Assembly Reference
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly));
-
-// FluentValidation Assembly Reference
-builder.Services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
-
-// ValidationPipeline
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+// Application Services
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
