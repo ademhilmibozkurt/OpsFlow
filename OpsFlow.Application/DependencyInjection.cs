@@ -14,8 +14,13 @@ namespace OpsFlow.Application
             // FluentValidation Assembly Reference
             services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
 
+            // Logging Pipeline
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+
             // ValidationPipeline
             services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+
+            // Handler Pipeline
 
             return services;
         }
