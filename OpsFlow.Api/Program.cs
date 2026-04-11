@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using OpsFlow.Api.Middleware;
 using OpsFlow.Application;
 using OpsFlow.Infrastructure;
 using OpsFlow.Infrastructure.Settings;
@@ -40,6 +41,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 var app = builder.Build();
+
+// middleware
+app.UseGlobalExceptionMiddleware();
 
 // use auths
 app.UseAuthentication();
