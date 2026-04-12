@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpsFlow.Application.Users.Commands.Login;
+using OpsFlow.Application.Users.Commands.RefreshToken;
 using OpsFlow.Application.Users.Commands.Register;
 using OpsFlow.Application.Users.Dtos;
 
@@ -35,6 +36,17 @@ namespace OpsFlow.Api.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginCommand command)
+        {
+            AuthTokenResponseDto result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Refreshes access token.
+        /// </summary>
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
         {
             AuthTokenResponseDto result = await _mediator.Send(command);
             return Ok(result);
