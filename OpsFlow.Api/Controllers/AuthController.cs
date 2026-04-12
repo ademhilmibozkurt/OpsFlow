@@ -1,11 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpsFlow.Application.Common.Results;
 using OpsFlow.Application.Users.Commands.Login;
 using OpsFlow.Application.Users.Commands.Logout;
 using OpsFlow.Application.Users.Commands.RefreshToken;
 using OpsFlow.Application.Users.Commands.Register;
 using OpsFlow.Application.Users.Dtos;
+using OpsFlow.Application.Users.Queries.GetMyProfile;
 
 namespace OpsFlow.Api.Controllers
 {
@@ -60,6 +62,17 @@ namespace OpsFlow.Api.Controllers
         {
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Fetch logged in users info.
+        /// </summary
+        [HttpGet("current-user")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentUser(GetMyProfileQuery query)
+        {
+            GetUserDetailResponseDto result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }
