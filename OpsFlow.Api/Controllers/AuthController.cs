@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpsFlow.Application.Users.Commands.Login;
 using OpsFlow.Application.Users.Commands.Register;
+using OpsFlow.Application.Users.Dtos;
 
 namespace OpsFlow.Api.Controllers
 {
@@ -25,6 +27,17 @@ namespace OpsFlow.Api.Controllers
         {
             await _mediator.Send(command);
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        /// <summary>
+        /// User log in and return Jwt token.
+        /// </summary>
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginCommand command)
+        {
+            AuthTokenResponseDto result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }
