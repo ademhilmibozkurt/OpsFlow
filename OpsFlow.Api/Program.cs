@@ -1,4 +1,3 @@
-using System.Security.Cryptography.Xml;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -54,19 +53,12 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Jwt Authorization header."
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(document =>
+    new()
     {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
+        [
+            new OpenApiSecuritySchemeReference("Bearer", document)
+        ] = []
     });
 });
 
