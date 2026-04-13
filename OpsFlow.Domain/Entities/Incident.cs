@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Runtime.CompilerServices;
 using OpsFlow.Domain.Enums;
 
 namespace OpsFlow.Domain.Entities
@@ -9,16 +6,16 @@ namespace OpsFlow.Domain.Entities
     {
         private string _title;
         private string _description;
-        private string? _abortionNote = "";
+        private string? _abortionNote;
         private string _createdById;
-        private string _invastigateById;
-        private string _closedById;
-        private string _abortedById;
-        private string _deletedById;
-        private string _settedById;
+        private string? _invastigateById;
+        private string? _closedById;
+        private string? _abortedById;
+        private string? _deletedById;
+        private string? _settedById;
         private IncidentPriority _priority;
         private IncidentState _state;
-        private List<IncidentTask> _tasks;
+        private List<IncidentTask>? _tasks = new List<IncidentTask>();
 
         public string Title => _title;
         public string Description => _description;
@@ -26,7 +23,7 @@ namespace OpsFlow.Domain.Entities
         public string CreatedById => _createdById;
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
-        public List<IncidentTask> Tasks => _tasks;
+        public List<IncidentTask>? Tasks => _tasks;
 
         
         private Incident(string title, string description, string createdById)
@@ -118,24 +115,30 @@ namespace OpsFlow.Domain.Entities
                 throw new InvalidOperationException("Incident is not open. Can not add task!");
             }
 
-            _tasks.Append(task);
+            _tasks?.Append(task);
         }
 
         public IncidentTask GetTask(string taskId)
         {
-            IncidentTask task = _tasks.Find(t => t.Id == taskId);
+            IncidentTask task = _tasks?.Find
+            (
+                t => t.Id == taskId
+            ) ?? throw new NullReferenceException("Task not found. Task does not exist!");
             return task;
         }
 
-
         public void DropTask(string taskId)
         {
-            IncidentTask task = _tasks.Find(t => t.Id == taskId) ?? throw new NullReferenceException($"{taskId} is not found. Task is null!");
+            IncidentTask task = _tasks?.Find
+            (
+                t => t.Id == taskId
+            ) ?? throw new NullReferenceException("Task not found. Task does not exist!");
             _tasks.Remove(task);
         }
 
         public void EnsureTasksDone()
         {
+            if(_tasks == null) throw new Exception();
             foreach(IncidentTask task in _tasks)
             {
                 if (task.TaskState != IncidentTaskState.Done)
@@ -147,6 +150,7 @@ namespace OpsFlow.Domain.Entities
 
         public bool IsAllTasksDone()
         {
+            if(_tasks == null) throw new Exception();
             foreach(IncidentTask task in _tasks)
             {
                 if (task.TaskState != IncidentTaskState.Done)
@@ -159,12 +163,14 @@ namespace OpsFlow.Domain.Entities
 
         public int TaskCount()
         {
-            return _tasks.Count;
+
+            return _tasks == null ? throw new Exception() : _tasks.Count;
         }
         
         public int OpenTaskCount()
         {
             int count = 0;
+            if(_tasks == null) throw new Exception();
             foreach(IncidentTask task in _tasks)
             {
                 if (task.TaskState == IncidentTaskState.Assigned ||
@@ -180,6 +186,7 @@ namespace OpsFlow.Domain.Entities
         public int CompletedTaskCount()
         {
             int count = 0;
+            if(_tasks == null) throw new Exception();
             foreach(IncidentTask task in _tasks)
             {
                 if (task.TaskState == IncidentTaskState.Done ||

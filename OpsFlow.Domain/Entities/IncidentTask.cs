@@ -21,7 +21,7 @@ namespace OpsFlow.Domain.Entities
         public string IncidentId => _incidentId;
         public string Title => _title;
         public string Note => _note;
-        public string AbortionNote => _abortionNote;
+        public string? AbortionNote => _abortionNote;
         public IncidentTaskState TaskState => _taskState;
         public string AssigneeId => _assigneeId;
         public string CreatedById => _createdById;
