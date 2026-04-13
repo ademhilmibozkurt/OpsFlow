@@ -1,5 +1,7 @@
+using System.Security.Cryptography.Xml;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using OpsFlow.Api.Middleware;
 using OpsFlow.Application;
 using OpsFlow.Infrastructure;
@@ -30,6 +32,44 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "OpsFlow API",
+        Version = "v1",
+        Description = "OpsFlow Incident Management System API"
+    });
+
+    // Jwt Authentication
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Jwt Authorization header."
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
@@ -44,6 +84,13 @@ var app = builder.Build();
 
 // middleware
 app.UseGlobalExceptionMiddleware();
+
+// Use Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 // use auths
 app.UseAuthentication();
