@@ -8,14 +8,14 @@ namespace OpsFlow.Domain.Entities
         private Enum _eventType;
         private DateTime _occuredAt;
         private string _performedById;
-        private string _taskId;
+        private string? _taskId;
         private string _note;
 
         public string IncidentId => _incidentId;
         public DateTime OccuredAt => _occuredAt;
         public Enum EventType => _eventType;
         public string PerformedById => _performedById;
-        public string TaskId => _taskId;
+        public string? TaskId => _taskId;
         public string Note => _note;
 
         private IncidentHistory(string incidentId, string performedById, IncidentState eventType, DateTime occuredAt, string note)
@@ -27,7 +27,7 @@ namespace OpsFlow.Domain.Entities
             _note = note;
         }
 
-        private IncidentHistory(string incidentId, string performedById, IncidentTaskState eventType, DateTime occuredAt, string taskId, string note)
+        private IncidentHistory(string incidentId, string performedById, IncidentTaskState eventType, DateTime occuredAt, string note, string? taskId)
         {
             _incidentId = incidentId;
             _performedById = performedById;
