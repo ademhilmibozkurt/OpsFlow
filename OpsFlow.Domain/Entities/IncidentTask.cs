@@ -6,16 +6,16 @@ namespace OpsFlow.Domain.Entities
     {
         private string _incidentId;
         private string _title;
-        private string _note = "";
-        private string? _abortionNote = "";
+        private string _note;
+        private string? _abortionNote;
         private IncidentTaskState _taskState;
         private string _createdById;
-        private string _assigneeId;
-        private string _assignedById;
-        private string _startedById;
-        private string _finishedById;
-        private string _abortedById;
-        private string _deletedById;
+        private string? _assigneeId;
+        private string? _assignedById;
+        private string? _startedById;
+        private string? _finishedById;
+        private string? _abortedById;
+        private string? _deletedById;
 
         // properties can read-only outside the class
         public string IncidentId => _incidentId;
@@ -23,10 +23,10 @@ namespace OpsFlow.Domain.Entities
         public string Note => _note;
         public string? AbortionNote => _abortionNote;
         public IncidentTaskState TaskState => _taskState;
-        public string AssigneeId => _assigneeId;
-        public string CreatedById => _createdById;
+        public string? AssigneeId => _assigneeId;
+        public string? CreatedById => _createdById;
 
-        private IncidentTask(string incidentId, string title, string createdById, string note = "")
+        private IncidentTask(string incidentId, string title, string createdById, string note)
         {
             EnsureTitleIsValid(title);
             
@@ -37,9 +37,9 @@ namespace OpsFlow.Domain.Entities
             _taskState = IncidentTaskState.Created;
         }
 
-        public static IncidentTask Create(string incidentId, string title, string createdById, string note = "")
+        public static IncidentTask Create(string incidentId, string title, string createdById, string note)
         {
-            return new IncidentTask(incidentId, title, note);
+            return new IncidentTask(incidentId, title, createdById, note);
         }
 
         private void EnsureTitleIsValid(string title)
