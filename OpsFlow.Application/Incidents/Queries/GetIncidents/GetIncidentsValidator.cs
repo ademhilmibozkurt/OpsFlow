@@ -19,7 +19,7 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidents
                 .NotEmpty()
                 .WithMessage("Priority can not null!");
 
-            /* RuleFor(v => v.Priority)
+            /* RuleFor(v => v.Priority)s
                 .Must(d => d is IncidentPriority)
                 .WithMessage("Priority must be IncidentPriority enum type!"); */
         }
