@@ -18,10 +18,6 @@ namespace OpsFlow.Application.Incidents.Commands.ChangePriority
             RuleFor(v => v.toPriority)
                 .NotEmpty()
                 .WithMessage("Priority can not null!");
-
-            RuleFor(v => v.toPriority)
-                .Must(d => d is IncidentPriority)
-                .WithMessage("Priority must be IncidentPriority type!");
         }
     }
 }
