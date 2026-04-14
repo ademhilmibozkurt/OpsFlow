@@ -13,7 +13,7 @@ namespace OpsFlow.Application.Common.Results
         public static Result<T> Success(T value)
             => new Result<T>(true, value, null);
 
-        public static Result<T> Failure(string error)
+        public new static Result<T> Failure(string error)
             => new Result<T>(false, default, error);
     }
 }
