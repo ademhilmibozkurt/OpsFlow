@@ -46,11 +46,14 @@ namespace OpsFlow.Application.Tasks.Commands.CloseTask
                 cancellationToken)
                 ?? throw new NotFoundException("Incident not found!");
 
-            IncidentTask task = incident.GetTask(request.taskId);
+            IncidentTask task = incident.GetTask(request.taskId); 
 
             // checkPermission
-            _permissionService.CanCloseTask(userRole, task.AssigneeId);
-
+            if (task.AssigneeId != null)
+            {
+                _permissionService.CanCloseTask(userRole, task.AssigneeId);
+            }
+            
             // finishTask
             task.Close(userId);
             DateTime closedAt = _timeProvider.Now();
