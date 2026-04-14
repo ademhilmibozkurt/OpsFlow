@@ -39,6 +39,7 @@ namespace OpsFlow.Infrastructure
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailService, SmtpEmailService>();
 
             // add Identity
             services.AddIdentity<AppUser, AppRole>(options =>

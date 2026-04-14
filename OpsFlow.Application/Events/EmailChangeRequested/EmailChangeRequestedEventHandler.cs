@@ -9,7 +9,7 @@ namespace OpsFlow.Application.Events.EmailChangeRequested
         private readonly IEmailService _emailService;
         public EmailChangeRequestedEventHandler(IEmailService emailService)
         {
-            _emailService = _emailService;
+            _emailService = emailService;
         }
 
         public async Task Handle(EmailChangeRequestedEvent notification, CancellationToken cancellationToken)
