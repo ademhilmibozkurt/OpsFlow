@@ -55,7 +55,11 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskDetail
             query = query.OrderByDescending(t => t.CreatedAt);
 
             // returnDto
-            return query.FirstOrDefault() ?? throw new NotFoundException("Task detail not found!");
+            return await Task.FromResult
+            (
+                query.FirstOrDefault()
+                ?? throw new NotFoundException("Task detail not found!")
+            );
         }
     }
 }
