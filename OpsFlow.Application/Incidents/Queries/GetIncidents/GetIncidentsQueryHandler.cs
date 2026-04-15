@@ -69,13 +69,13 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidents
                 )).ToList();
 
             // returnDto
-            return new PaginatedResponseDto<IncidentListItemDto>
+            return await Task.FromResult(new PaginatedResponseDto<IncidentListItemDto>
             (
                 items,
                 pageNumber,
                 pageSize,
                 totalCount
-            );
+            ));
         }
     }
 }
