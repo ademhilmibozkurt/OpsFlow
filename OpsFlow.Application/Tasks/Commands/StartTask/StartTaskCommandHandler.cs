@@ -39,7 +39,6 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
         {
              // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User id not found!");
-            string userRole = _currentUser.Role ?? throw new AuthenticationException("User role not found!");
 
             // findTask
             Incident incident = await _incidentRepository.GetByIdAsync(
@@ -47,10 +46,13 @@ namespace OpsFlow.Application.Tasks.Commands.AssignTask
                 cancellationToken)
                 ?? throw new NotFoundException("Incident not found!");
 
-            IncidentTask task = incident.GetTask(request.taskId);
+            IncidentTask task = incident.GetTask(request.taskId) ?? throw new NotFoundException("");
             
             // checkPermission
-            _permissionService.CanStartTask(userId, task.AssigneeId);
+            if (task.AssigneeId != null)
+            {
+                _permissionService.CanStartTask(userId, task.AssigneeId);
+            }
 
             // startTask
             task.Start(userId);
