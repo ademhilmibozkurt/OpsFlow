@@ -7,7 +7,7 @@ namespace OpsFlow.Application.Tasks.Dtos
         string TaskId,
         string IncidentId,
         string CreatedById,
-        string AssigneeId,
+        string? AssigneeId,
         string Title,
         string Note,
         IncidentTaskState State,

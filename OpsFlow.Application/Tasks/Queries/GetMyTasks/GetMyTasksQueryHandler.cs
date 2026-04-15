@@ -66,13 +66,13 @@ namespace OpsFlow.Application.Tasks.Queries.GetMyTasks
                 )).ToList();
 
             // returnDto
-            return new PaginatedResponseDto<TaskListItemDto>
+            return await Task.FromResult(new PaginatedResponseDto<TaskListItemDto>
             (
                 items,
                 pageNumber,
                 pageSize,
                 totalCount
-            );
+            ));
         }
     }
 }
