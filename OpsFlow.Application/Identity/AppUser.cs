@@ -6,6 +6,6 @@ namespace OpsFlow.Application.Identity
     {
         public required string FullName {get; set;}
         public DateTime CreatedAt {get; set;}
-        public required AppRole Role {get; set;}
+        public AppRole Role {get; set;}
     }
 }
