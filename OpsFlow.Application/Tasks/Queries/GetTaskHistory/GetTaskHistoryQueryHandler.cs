@@ -73,13 +73,13 @@ namespace OpsFlow.Application.Tasks.Queries.GetTaskHistory
                 ?? throw new NotFoundException("Task history not found!");  
 
             // returnDto
-            return new PaginatedResponseDto<HistoryItemDto>
+            return await Task.FromResult(new PaginatedResponseDto<HistoryItemDto>
             (
                 items,
                 pageNumber,
                 pageSize,
                 totalCount
-            );
+            ));
         }
     }
 }
