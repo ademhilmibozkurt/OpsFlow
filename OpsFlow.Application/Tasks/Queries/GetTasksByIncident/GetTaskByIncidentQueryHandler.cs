@@ -89,13 +89,13 @@ namespace OpsFlow.Application.Tasks.Queries.GetTasksByIncident
                 ?? throw new NotFoundException("Tasks not found!");
 
             // returnDto
-            return new PaginatedResponseDto<TaskListItemDto>
+            return await Task.FromResult(new PaginatedResponseDto<TaskListItemDto>
             (
                 items,
                 pageNumber,
                 pageSize,
                 totalCount
-            );
+            ));
         }
     }
 }
