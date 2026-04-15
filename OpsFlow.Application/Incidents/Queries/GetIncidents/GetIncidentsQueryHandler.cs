@@ -43,16 +43,10 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidents
 
             // addOptionalFiltering
                 // filterByState
-            if (request.State != null)
-            {
-                query = query.Where(x => x.State == request.State);
-            }
+            query = query.Where(x => x.State == request.State);
 
                 // filterByPriority
-            if (request.Priority != null)
-            {
-                query = query.Where(x => x.Priority == request.Priority);
-            }
+            query = query.Where(x => x.Priority == request.Priority);
 
             // getTotalCount
             int totalCount = query.Count();
