@@ -51,8 +51,8 @@ namespace OpsFlow.Application.Users.Commands.Register
             return new RegisterResponseDto
             (
                 user.FullName,
-                user.UserName,
-                user.Email,
+                request.userName,
+                request.email,
                 token.AccessToken,
                 token.RefreshToken,
                 token.ExpiresAt
