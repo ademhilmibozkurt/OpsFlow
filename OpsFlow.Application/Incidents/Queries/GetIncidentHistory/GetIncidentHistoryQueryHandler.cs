@@ -68,13 +68,13 @@ namespace OpsFlow.Application.Incidents.Queries.GetIncidentHistory
                 ?? throw new NotFoundException("Query result not found!");
 
             //  returnDto
-            return new PaginatedResponseDto<HistoryItemDto>
+            return await Task.FromResult(new PaginatedResponseDto<HistoryItemDto>
             (
                 items,
                 pageNumber,
                 pageSize,
                 totalCount
-            );
+            ));
         }
     }
 }
