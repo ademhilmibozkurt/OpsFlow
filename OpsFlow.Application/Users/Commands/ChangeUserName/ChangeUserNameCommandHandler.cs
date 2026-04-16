@@ -34,16 +34,15 @@ namespace OpsFlow.Application.Users.Commands.ChangeUserName
             // getCurrentUser
             string userId = _currentUser.UserId ?? throw new AuthenticationException("User not authenticated!");;
 
-            // checkUserName
-            IQueryable<AppUser> existedUser = await _userService.FindByUserNameAsync(request.newUserName);
-
-            if (existedUser != null)
+            // checkExistedUser
+            if (await _userService.FindByUserNameAsync(request.newUserName) != null)
                 throw new ForbiddenException("Provided user name exists!");
 
             // getUser
-            AppUser user = await _userService.FindByIdAsync(
-                userId)
-                ?? throw new NotFoundException("User not found!");
+            AppUser user = await _userService.FindByIdAsync
+            (
+                userId
+            )?? throw new NotFoundException("User not found!");
 
             // checkPermission
             _permissionService.CanChangeUserName(userId, user.Id);
