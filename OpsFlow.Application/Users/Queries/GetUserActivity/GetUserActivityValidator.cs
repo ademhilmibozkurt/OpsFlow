@@ -33,10 +33,6 @@ namespace OpsFlow.Application.Users.Queries.GetUserActivity
             RuleFor(v => v.onlyTasks)
                 .NotEmpty()
                 .WithMessage("OnlyTasks can not null!");
-
-            RuleFor(v => v.onlyTasks)
-                .Must(d => d is bool)
-                .WithMessage("OnlyTasks must be boolean!");
         }
     }
 }
