@@ -23,7 +23,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
     
         public async Task UpdateAsync(Incident incident, CancellationToken cancellationToken)
         {
-            _context.Incidents.Update(incident);
+            await Task.FromResult(_context.Incidents.Update(incident));
         }
 
         public async Task<Incident> GetByIdAsync(string incidentId, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
 
         public async Task DeleteAsync(Incident incident, CancellationToken cancellationToken)
         {
-            _context.Incidents.Remove(incident);
+            await Task.FromResult(_context.Incidents.Remove(incident));
         }
 
         public IQueryable<Incident> Query(CancellationToken cancellationToken)
