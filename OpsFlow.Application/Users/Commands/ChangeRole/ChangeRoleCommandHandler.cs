@@ -56,6 +56,9 @@ namespace OpsFlow.Application.Users.Commands.ChangeRole
             // revokeTokens
             await _tokenRepository.RevokeAllAsync(user.Id, cancellationToken);
 
+            // nullCheckUserName
+            if(user.UserName == null) throw new NullReferenceException("UserName is null!");
+
             // returnDto
             return new ChangeRoleResponseDto
             (
