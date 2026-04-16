@@ -1,6 +1,5 @@
 using System.Security.Authentication;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
@@ -69,7 +68,6 @@ namespace OpsFlow.Application.Incidents.Commands.AbortIncident
             // save
             _unitOfWork.CommitAsync(cancellationToken);
 
-            
             return new AbortIncidentResponseDto
             (
                 incident.Id,
