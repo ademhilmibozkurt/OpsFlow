@@ -1,7 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using System.Security.Authentication;
 using MediatR;
-using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
 using OpsFlow.Application.Identity;
@@ -46,6 +44,10 @@ namespace OpsFlow.Application.Users.Commands.UpdateProfile
             user.PhoneNumber = request.phoneNumber;
             await _userService.UpdateAsync(user);
             DateTime updatedAt = _timeProvider.Now();
+
+            // nullCheck
+            if (user.UserName == null) throw new NullReferenceException("UserName is null!");
+            if (user.Email == null) throw new NullReferenceException("Email is null!");
 
             // returnDto
             return new UpdateProfileResponseDto
