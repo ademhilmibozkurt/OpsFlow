@@ -42,7 +42,7 @@ namespace OpsFlow.Application.Users.Commands.Register
                 request.email,
                 request.phoneNumber,
                 request.password
-            ) ?? throw new NullReferenceException("User not found!");
+            );
 
             // generateToken
             var token = _tokenService.GenerateTokens(user);

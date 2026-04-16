@@ -54,9 +54,6 @@ namespace OpsFlow.Application.Users.Commands.ChangePassword
 
             // emailNotification
 
-            // checkUserName
-            if(user.UserName == null) throw new NullReferenceException();
-
             // returnDto
             return new ChangePasswordResponseDto
             (
