@@ -54,7 +54,7 @@ namespace OpsFlow.Infrastructure.Services
             => await _userManager.FindByEmailAsync(email);
 
         public async Task<IQueryable<AppUser?>> FindByUserNameAsync(string userName)
-            => _userManager.Users.Where(x => x.UserName == userName);
+            => await Task.FromResult(_userManager.Users.Where(x => x.UserName == userName));
 
         public async Task<string> GenerateChangeEmailTokenAsync(AppUser user, string newEmail)
         => await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
@@ -74,6 +74,6 @@ namespace OpsFlow.Infrastructure.Services
             => await _userManager.DeleteAsync(user);
 
         public async Task<IQueryable<AppUser>> Query()
-            => _userManager.Users;
+            => await Task.FromResult(_userManager.Users);
     }
 }

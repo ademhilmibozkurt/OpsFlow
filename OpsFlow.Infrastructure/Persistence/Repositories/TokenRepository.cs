@@ -28,9 +28,12 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             cancellationToken);
         }
 
-        public async Task<RefreshTokenModel> GetByTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<RefreshTokenModel?>? GetByTokenAsync(string refreshToken, CancellationToken cancellationToken)
         {
-            RefreshToken model = await _context.Tokens.FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
+            RefreshToken? model = await _context.Tokens.FirstOrDefaultAsync
+            (
+                x => x.Token == refreshToken, cancellationToken
+            );
 
             if (model == null)
                 return null;
@@ -46,7 +49,10 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
 
         public async Task RevokeAsync(string refreshToken, CancellationToken cancellationToken)
         {
-            RefreshToken model = await _context.Tokens.FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
+            RefreshToken? model = await _context.Tokens.FirstOrDefaultAsync
+            (
+                x => x.Token == refreshToken, cancellationToken
+            );
             
             if (model != null)
                 model.IsRevoked = true;
