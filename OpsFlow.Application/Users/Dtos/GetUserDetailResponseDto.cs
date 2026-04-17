@@ -8,7 +8,7 @@ namespace OpsFlow.Application.Users.Dtos
         string UserName,
         string Email,
         string PhoneNumber,
-        AppRole Role,
+        string Role,
         DateTime CreatedAt
     );
 }

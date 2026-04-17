@@ -4,5 +4,5 @@ using OpsFlow.Application.Users.Dtos;
 
 namespace OpsFlow.Application.Users.Commands.ChangeRole
 {
-    public record ChangeRoleCommand(string userId, AppRole userRole) : IRequest<ChangeRoleResponseDto>;
+    public record ChangeRoleCommand(string userId, string userRole) : IRequest<ChangeRoleResponseDto>;
 }

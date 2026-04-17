@@ -24,7 +24,8 @@ namespace OpsFlow.Infrastructure.Services
                 FullName = fullName,
                 UserName = userName,
                 Email    = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Role = AppRole.User
             };
 
             // createUser - with identity user manager

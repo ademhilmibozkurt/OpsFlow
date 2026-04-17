@@ -6,6 +6,6 @@ namespace OpsFlow.Application.Users.Dtos
     (
         string FullName,
         string UserName,
-        AppRole Role
+        string Role
     );
 }

@@ -9,6 +9,6 @@ namespace OpsFlow.Application.Identity
         public new required string Email {get; set;}
         public new required string PhoneNumber {get; set;}
         public DateTime CreatedAt {get; set;}
-        public required AppRole Role {get; set;}
+        public required string Role {get; set;}
     }
 }
