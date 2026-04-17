@@ -20,7 +20,7 @@ namespace OpsFlow.Application.Users.Commands.ChangeRole
                 .WithMessage("UserRole can not null!");    
 
             RuleFor(v => v.userRole)
-                .Must(d => d is AppRole)
+                .Must(d => d is string)
                 .WithMessage("UserRole must be AppRole type!");
         }
     }
