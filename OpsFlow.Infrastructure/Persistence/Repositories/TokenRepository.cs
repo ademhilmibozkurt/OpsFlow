@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OpsFlow.Application.Abstractions.Persistence;
+using OpsFlow.Application.Common.Results;
 using OpsFlow.Application.Models;
 using OpsFlow.Infrastructure.Entities;
 using OpsFlow.Infrastructure.Persistence.AppContext;
@@ -28,7 +29,7 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             cancellationToken);
         }
 
-        public async Task<RefreshTokenModel?>? GetByTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<Result<RefreshTokenModel>> GetByTokenAsync(string refreshToken, CancellationToken cancellationToken)
         {
             RefreshToken? model = await _context.Tokens.FirstOrDefaultAsync
             (
@@ -36,15 +37,15 @@ namespace OpsFlow.Infrastructure.Persistence.Repositories
             );
 
             if (model == null)
-                return null;
+                return Result<RefreshTokenModel>.Failure("Model is null!");
 
-            return new RefreshTokenModel
+            return Result<RefreshTokenModel>.Success(new RefreshTokenModel
             {
                 Token = model.Token,
                 UserId = model.UserId,
                 ExpiresAt = model.ExpiresAt,
                 IsRevoked = model.IsRevoked
-            };
+            });
         }
 
         public async Task RevokeAsync(string refreshToken, CancellationToken cancellationToken)

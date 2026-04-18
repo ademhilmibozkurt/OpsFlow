@@ -2,6 +2,7 @@ using MediatR;
 using OpsFlow.Application.Abstractions.Persistence;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Common.Exceptions;
+using OpsFlow.Application.Common.Results;
 using OpsFlow.Application.Identity;
 using OpsFlow.Application.Models;
 using OpsFlow.Application.Users.Dtos;
@@ -28,11 +29,12 @@ namespace OpsFlow.Application.Users.Commands.RefreshToken
 
         public async Task<AuthTokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            // getRefreshToken
-            RefreshTokenModel existingToken = await _tokenRepository.GetByTokenAsync(
+            // getResult
+            RefreshTokenModel existingToken = await _tokenRepository.GetByTokenAsync
+            (
                 request.refreshToken,
-                cancellationToken)
-                ?? throw new NotFoundException("Refresh token not found!");
+                cancellationToken
+            );
 
             // checkRefreshToken - is revoked or expired
             if(existingToken.IsRevoked || existingToken.ExpiresAt < _timeProvider.Now())
