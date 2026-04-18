@@ -30,11 +30,14 @@ namespace OpsFlow.Application.Users.Commands.RefreshToken
         public async Task<AuthTokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
             // getResult
-            RefreshTokenModel existingToken = await _tokenRepository.GetByTokenAsync
+            Result<RefreshTokenModel> result = await _tokenRepository.GetByTokenAsync
             (
                 request.refreshToken,
                 cancellationToken
             );
+
+            // getToken
+            RefreshTokenModel existingToken = result.Value ?? throw new NotFoundException("Refresh token not found!");
 
             // checkRefreshToken - is revoked or expired
             if(existingToken.IsRevoked || existingToken.ExpiresAt < _timeProvider.Now())
