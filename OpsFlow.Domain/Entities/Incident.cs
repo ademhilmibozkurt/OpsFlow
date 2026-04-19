@@ -25,7 +25,10 @@ namespace OpsFlow.Domain.Entities
         public IncidentState State => _state;
         public List<IncidentTask>? Tasks => _tasks;
 
-        
+        private Incident()
+        {
+        }
+
         private Incident(string title, string description, string createdById)
         {
             EnsureIsValid(title, "title");
