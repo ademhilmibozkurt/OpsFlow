@@ -14,6 +14,9 @@ var jwtSettings = builder.Configuration
     .Get<JwtSettings>()
     ?? throw new NullReferenceException("Jwt settings is null!");
 
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
+
 // add jwt bearer
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

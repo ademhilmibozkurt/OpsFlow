@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpsFlow.Application.Abstractions.Services;
 using OpsFlow.Application.Identity;
@@ -13,9 +14,9 @@ namespace OpsFlow.Infrastructure.Services
     {
         private readonly JwtSettings _jwtSettings;
         // dependency injection
-        public TokenService(JwtSettings jwtSettings)
+        public TokenService(IOptions<JwtSettings> jwtOptions)
         {
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtOptions.Value;
         }
         public TokenResultModel GenerateTokens(AppUser user)
         {
