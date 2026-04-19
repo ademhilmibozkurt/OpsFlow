@@ -4,12 +4,12 @@ namespace OpsFlow.Domain.Entities
 {
     public class IncidentTask : BaseEntity
     {
-        private string _incidentId;
-        private string _title;
-        private string _note;
+        private string _incidentId = null!;
+        private string _title = null!;
+        private string _note = null!;
         private string? _abortionNote;
         private IncidentTaskState _taskState;
-        private string _createdById;
+        private string _createdById = null!;
         private string? _assigneeId;
         private string? _assignedById;
         private string? _startedById;
@@ -25,6 +25,10 @@ namespace OpsFlow.Domain.Entities
         public IncidentTaskState TaskState => _taskState;
         public string? AssigneeId => _assigneeId;
         public string CreatedById => _createdById;
+
+        private IncidentTask()
+        {
+        }
 
         private IncidentTask(string incidentId, string title, string createdById, string note)
         {

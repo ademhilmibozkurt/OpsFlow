@@ -4,10 +4,10 @@ namespace OpsFlow.Domain.Entities
 {
     public class Incident : BaseEntity
     {
-        private string _title;
-        private string _description;
+        private string _title = null!;
+        private string _description = null!;
         private string? _abortionNote;
-        private string _createdById;
+        private string _createdById = null!;
         private string? _invastigateById;
         private string? _closedById;
         private string? _abortedById;
