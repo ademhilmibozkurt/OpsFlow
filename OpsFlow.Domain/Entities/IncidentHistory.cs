@@ -4,12 +4,12 @@ namespace OpsFlow.Domain.Entities
 {
     public class IncidentHistory : BaseEntity
     {
-        private string _incidentId;
-        private Enum _eventType;
+        private string _incidentId = null!;
+        private Enum _eventType = null!;
         private DateTime _occuredAt;
-        private string _performedById;
+        private string _performedById = null!;
         private string? _taskId;
-        private string _note;
+        private string _note = null!;
 
         public string IncidentId => _incidentId;
         public DateTime OccuredAt => _occuredAt;
@@ -17,6 +17,10 @@ namespace OpsFlow.Domain.Entities
         public string PerformedById => _performedById;
         public string? TaskId => _taskId;
         public string Note => _note;
+
+        private IncidentHistory()
+        {
+        }
 
         private IncidentHistory(string incidentId, string performedById, IncidentState eventType, DateTime occuredAt, string note)
         {
