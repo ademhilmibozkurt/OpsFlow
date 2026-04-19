@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OpsFlow.Application.Common.Results;
 using OpsFlow.Application.Users.Commands.Login;
 using OpsFlow.Application.Users.Commands.Logout;
 using OpsFlow.Application.Users.Commands.RefreshToken;
@@ -58,6 +57,8 @@ namespace OpsFlow.Api.Controllers
         /// <summary>
         /// Log user out.
         /// </summary>
+        [HttpPost("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout(LogoutCommand command)
         {
             await _mediator.Send(command);
