@@ -19,7 +19,7 @@ namespace OpsFlow.Infrastructure
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString(""));
+                options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
             });
 
             // repositories DI
