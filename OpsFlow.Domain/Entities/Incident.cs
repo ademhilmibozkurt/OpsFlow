@@ -23,7 +23,7 @@ namespace OpsFlow.Domain.Entities
         public string CreatedById => _createdById;
         public IncidentPriority Priority => _priority;
         public IncidentState State => _state;
-        public List<IncidentTask>? Tasks => _tasks;
+        public IReadOnlyCollection<IncidentTask>? Tasks => _tasks;
 
         private Incident()
         {
