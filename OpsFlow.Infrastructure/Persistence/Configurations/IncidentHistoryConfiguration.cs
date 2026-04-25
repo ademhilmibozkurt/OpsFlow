@@ -52,13 +52,6 @@ namespace OpsFlow.Infrastructure.Configuration
                 .WithMany("_histories")
                 .HasForeignKey("_taskId")
                 .OnDelete(DeleteBehavior.NoAction);
-
-            // navigationFieldAccess
-            builder.Navigation("_incident")
-                .UsePropertyAccessMode(PropertyAccessMode.Field);
-
-            builder.Navigation("_task")
-                .UsePropertyAccessMode(PropertyAccessMode.Field);
             
             // softDelete
             builder.HasQueryFilter(h => !h.IsDeleted);
