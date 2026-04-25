@@ -15,7 +15,9 @@ namespace OpsFlow.Infrastructure.Persistence.AppContext
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);                   
+            base.OnModelCreating(modelBuilder);        
+            
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         } 
 
         public DbSet<Incident> Incidents {get; set;}
