@@ -5,6 +5,7 @@ namespace OpsFlow.Domain.Entities
     public class IncidentTask : BaseEntity
     {
         private string _incidentId = null!;
+        private Incident _incident = null!;
         private string _title = null!;
         private string _note = null!;
         private string? _abortionNote;
