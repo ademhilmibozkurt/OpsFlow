@@ -43,13 +43,13 @@ namespace OpsFlow.Infrastructure.Configuration
                 .IsRequired();
 
             // relationship
-            builder.HasOne(typeof(Incident), "_incident")
-                .WithMany("_histories")
+            builder.HasOne<Incident>()
+                .WithMany()
                 .HasForeignKey("_incidentId")
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(typeof(IncidentTask), "_task")
-                .WithMany("_histories")
+            builder.HasOne<IncidentTask>()
+                .WithMany()
                 .HasForeignKey("_taskId")
                 .OnDelete(DeleteBehavior.NoAction);
             
